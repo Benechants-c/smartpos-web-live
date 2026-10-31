@@ -9,54 +9,50 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body class="bg-slate-900 text-white min-h-screen">
-<!-- LOGIN SCREEN -->
 <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
-<div class="bg-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+<div class="bg-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl border border-slate-700">
 <h1 class="text-2xl font-bold text-center mb-2">🔥 SmartPos LIVE</h1>
-<p class="text-center text-emerald-400 text-sm mb-4">smartpos-web-live.vercel.app | 14 MODULES</p>
-<input id="email" type="email" value="boss@smartpos.co.zw" class="w-full p-3 rounded-lg bg-slate-700 mb-2 outline-none" placeholder="Email">
-<input id="pass" type="password" value="Boss123" class="w-full p-3 rounded-lg bg-slate-700 mb-3 outline-none" placeholder="Password">
+<p class="text-center text-emerald-400 text-sm mb-4">smartpos-web-live.vercel.app | 14 MODULES | SHOP001-HRE</p>
+<input id="email" type="email" value="boss@smartpos.co.zw" class="w-full p-3 rounded-lg bg-slate-700 mb-2 outline-none border border-slate-600" placeholder="Email">
+<input id="pass" type="password" value="Boss123" class="w-full p-3 rounded-lg bg-slate-700 mb-3 outline-none border border-slate-600" placeholder="Password">
 <button onclick="loginEmail()" class="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-lg font-bold mb-2">Login / Register</button>
 <button onclick="loginGoogle()" class="w-full bg-white text-black p-3 rounded-lg font-bold">Google 1-Click</button>
-<p id="status" class="text-center mt-3 text-sm text-yellow-400"></p>
+<p id="status" class="text-center mt-3 text-sm text-yellow-400">Ready</p>
 <div id="loggedInfo" class="hidden text-center mt-2 text-emerald-400 text-sm">✅ LOGGED IN<br><span id="uEmail"></span><br>SHOP001-HRE<br>ZIMRA ON</div>
 </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dash" class="hidden">
-<header class="bg-slate-800 p-4 flex justify-between items-center sticky top-0 z-10">
+<header class="bg-slate-800 p-4 flex justify-between items-center sticky top-0 z-10 border-b border-slate-700">
 <div><b>SmartPos</b> <span class="text-xs bg-emerald-600 px-2 py-1 rounded">SHOP001-HRE | ZIMRA <span id="zimraStatus">ON</span></span></div>
 <div class="flex gap-2"><span id="dashEmail" class="text-xs"></span><button onclick="logout()" class="bg-red-600 px-3 py-1 rounded text-xs">Logout</button></div>
 </header>
 
 <nav class="flex flex-wrap gap-2 p-3 bg-slate-800/50">
-<button onclick="showMod('pos')" class="modBtn bg-blue-600 px-3 py-2 rounded text-xs">1. POS</button>
-<button onclick="showMod('products')" class="modBtn bg-slate-700 px-3 py-2 rounded text-xs">2. Products PRD</button>
-<button onclick="showMod('purchases')" class="modBtn bg-slate-700 px-3 py-2 rounded text-xs">3. Purchases G001</button>
-<button onclick="showMod('grn')" class="modBtn bg-slate-700 px-3 py-2 rounded text-xs">4. GRN</button>
-<button onclick="showMod('stock')" class="modBtn bg-slate-700 px-3 py-2 rounded text-xs">5. Stock</button>
-<button onclick="showMod('customers')" class="modBtn bg-slate-700 px-3 py-2 rounded text-xs">6. Customers</button>
-<button onclick="showMod('suppliers')" class="modBtn bg-slate-700 px-3 py-2 rounded text-xs">7. Suppliers</button>
-<button onclick="showMod('reports')" class="modBtn bg-slate-700 px-3 py-2 rounded text-xs">8. Reports / Profit</button>
-<button onclick="showMod('settings')" class="modBtn bg-slate-700 px-3 py-2 rounded text-xs">9-14. Settings</button>
+<button onclick="showMod('pos')" class="bg-blue-600 px-3 py-2 rounded text-xs">1. POS</button>
+<button onclick="showMod('products')" class="bg-slate-700 px-3 py-2 rounded text-xs">2. Products PRD</button>
+<button onclick="showMod('purchases')" class="bg-slate-700 px-3 py-2 rounded text-xs">3. Purchases G001</button>
+<button onclick="showMod('grn')" class="bg-slate-700 px-3 py-2 rounded text-xs">4. GRN</button>
+<button onclick="showMod('stock')" class="bg-slate-700 px-3 py-2 rounded text-xs">5. Stock</button>
+<button onclick="showMod('customers')" class="bg-slate-700 px-3 py-2 rounded text-xs">6. Customers</button>
+<button onclick="showMod('suppliers')" class="bg-slate-700 px-3 py-2 rounded text-xs">7. Suppliers</button>
+<button onclick="showMod('reports')" class="bg-slate-700 px-3 py-2 rounded text-xs">8. Reports / Profit</button>
+<button onclick="showMod('settings')" class="bg-slate-700 px-3 py-2 rounded text-xs">9-14. Settings</button>
 </nav>
 
-<div class="p-4 grid gap-4">
-<!-- POS MODULE -->
+<div class="p-4 grid gap-4 max-w-5xl mx-auto">
 <div id="mod-pos" class="mod bg-slate-800 p-4 rounded-xl">
 <h2 class="font-bold mb-2">1. POS - Sales | Gross Profit = Net Sales - COGS</h2>
 <div class="grid grid-cols-2 gap-2 mb-2">
 <input id="posBarcode" placeholder="Barcode PRD000125" class="p-2 rounded bg-slate-700">
 <input id="posQty" type="number" value="1" class="p-2 rounded bg-slate-700">
 </div>
-<button onclick="addToCart()" class="bg-emerald-600 px-4 py-2 rounded w-full">Add to Cart</button>
-<div id="cart" class="mt-3 text-sm bg-slate-900 p-2 rounded min-h-[80px]"></div>
+<button onclick="addToCart()" class="bg-emerald-600 px-4 py-2 rounded w-full font-bold">Add to Cart</button>
+<div id="cart" class="mt-3 text-sm bg-slate-900 p-2 rounded min-h-[80px]">Empty</div>
 <div class="mt-2 flex justify-between font-bold"><span>Total: $<span id="cartTotal">0.00</span></span><span>Profit: $<span id="cartProfit">0.00</span></span></div>
-<button onclick="checkout()" class="mt-2 bg-blue-600 w-full py-2 rounded">CHECKOUT & Deduct Stock</button>
+<button onclick="checkout()" class="mt-2 bg-blue-600 w-full py-2 rounded font-bold">CHECKOUT & Deduct Stock</button>
 </div>
 
-<!-- PRODUCTS -->
 <div id="mod-products" class="mod hidden bg-slate-800 p-4 rounded-xl">
 <h2 class="font-bold mb-2">2. Products - PRD000125</h2>
 <div class="grid grid-cols-2 gap-2 mb-2">
@@ -64,36 +60,32 @@
 <input id="prdName" placeholder="Name" class="p-2 rounded bg-slate-700">
 <input id="prdCost" type="number" placeholder="Cost (COGS)" class="p-2 rounded bg-slate-700">
 <input id="prdPrice" type="number" placeholder="Selling Price" class="p-2 rounded bg-slate-700">
-<input id="prdStock" type="number" placeholder="Opening Stock" class="p-2 rounded bg-slate-700">
+<input id="prdStock" type="number" placeholder="Opening Stock" class="p-2 rounded bg-slate-700 col-span-2">
 </div>
-<button onclick="saveProduct()" class="bg-blue-600 w-full py-2 rounded">Save Product</button>
-<div id="prodList" class="mt-3 text-xs"></div>
+<button onclick="saveProduct()" class="bg-blue-600 w-full py-2 rounded font-bold">Save Product</button>
+<div id="prodList" class="mt-3 text-xs bg-slate-900 p-2 rounded"></div>
 </div>
 
-<!-- PURCHASES -->
 <div id="mod-purchases" class="mod hidden bg-slate-800 p-4 rounded-xl">
 <h2 class="font-bold mb-2">3. Purchases G001 / G002 / G003</h2>
 <input id="purId" value="G001" class="p-2 rounded bg-slate-700 w-full mb-2">
 <input id="purSupplier" placeholder="Supplier" class="p-2 rounded bg-slate-700 w-full mb-2">
 <input id="purProduct" placeholder="Product Code PRD000125" class="p-2 rounded bg-slate-700 w-full mb-2">
 <input id="purQty" type="number" placeholder="Qty Received" class="p-2 rounded bg-slate-700 w-full mb-2">
-<button onclick="savePurchase()" class="bg-blue-600 w-full py-2 rounded">Save Purchase & Auto GRN</button>
-<div id="purList" class="mt-3 text-xs"></div>
+<button onclick="savePurchase()" class="bg-blue-600 w-full py-2 rounded font-bold">Save Purchase & Auto GRN</button>
+<div id="purList" class="mt-3 text-xs bg-slate-900 p-2 rounded"></div>
 </div>
 
-<!-- GRN -->
 <div id="mod-grn" class="mod hidden bg-slate-800 p-4 rounded-xl">
 <h2 class="font-bold mb-2">4. GRN - Stock = Opening + Received - Sold</h2>
-<div id="grnList" class="text-xs"></div>
+<div id="grnList" class="text-xs bg-slate-900 p-2 rounded"></div>
 </div>
 
-<!-- STOCK -->
 <div id="mod-stock" class="mod hidden bg-slate-800 p-4 rounded-xl">
 <h2 class="font-bold mb-2">5. Stock Report</h2>
-<div id="stockList" class="text-xs"></div>
+<div id="stockList" class="text-xs bg-slate-900 p-2 rounded"></div>
 </div>
 
-<!-- CUSTOMERS -->
 <div id="mod-customers" class="mod hidden bg-slate-800 p-4 rounded-xl">
 <h2 class="font-bold mb-2">6. Customers</h2>
 <input id="custName" placeholder="Customer Name" class="p-2 rounded bg-slate-700 w-full mb-2">
@@ -101,7 +93,6 @@
 <div id="custList" class="mt-3 text-xs"></div>
 </div>
 
-<!-- SUPPLIERS -->
 <div id="mod-suppliers" class="mod hidden bg-slate-800 p-4 rounded-xl">
 <h2 class="font-bold mb-2">7. Suppliers</h2>
 <input id="supName" placeholder="Supplier Name" class="p-2 rounded bg-slate-700 w-full mb-2">
@@ -109,7 +100,6 @@
 <div id="supList" class="mt-3 text-xs"></div>
 </div>
 
-<!-- REPORTS -->
 <div id="mod-reports" class="mod hidden bg-slate-800 p-4 rounded-xl">
 <h2 class="font-bold mb-2">8. Reports - Gross Profit</h2>
 <p class="text-xs mb-2">Formula: Gross Profit = Net Sales - COGS</p>
@@ -117,39 +107,44 @@
 <button onclick="calcReports()" class="mt-2 bg-emerald-600 w-full py-2 rounded">Refresh Reports</button>
 </div>
 
-<!-- SETTINGS -->
 <div id="mod-settings" class="mod hidden bg-slate-800 p-4 rounded-xl">
 <h2 class="font-bold mb-2">9-14. Settings - SHOP001-HRE, ZIMRA, VAT, Currency, Users, Backup</h2>
 <label class="flex justify-between bg-slate-700 p-2 rounded mb-2"><span>ZIMRA Fiscalisation</span><select id="zimraToggle" onchange="toggleZimra()" class="bg-slate-900 rounded"><option>ON</option><option>OFF</option></select></label>
-<p class="text-xs">Shop Code: SHOP001-HRE | Currency: USD/ZWG | VAT 15% | Modules: All 14 Active</p>
+<p class="text-xs">Shop Code: SHOP001-HRE | Currency: USD/ZWG | VAT 15% | Modules: All 14 Active | Project: smartpos-83781 | Vercel LIVE</p>
 </div>
-
 </div>
 </div>
 
 <script>
-const firebaseConfig = {apiKey:"AIzaSyB8s7y3i2d1b6q9v5t8u2x3y4z5a6b7c8d",authDomain:"smartpos-83781.firebaseapp.com",projectId:"smartpos-83781",storageBucket:"smartpos-83781.appspot.com",messagingSenderId:"123456789",appId:"1:123456789:web:abcdef"};
-// Use your real config from firebase console - keeping authDomain as firebaseapp.com for Google
-firebase.initializeApp({apiKey:"AIzaSyD1q9Vw3l8K4p2X7mN6bJ0tR5yU8iO1a2Z3",authDomain:"smartpos-83781.firebaseapp.com",projectId:"smartpos-83781",appId:"1:83781:web:123"});
-const auth=firebase.auth(); const db=firebase.firestore();
+const firebaseConfig = {
+  apiKey: "AIzaSyATD1DELs0gmtnS_iG8gcA2UvqwtQDF2A4",
+  authDomain: "smartpos-83781.firebaseapp.com",
+  databaseURL: "https://smartpos-83781-default-rtdb.firebaseio.com",
+  projectId: "smartpos-83781",
+  storageBucket: "smartpos-83781.firebasestorage.app",
+  messagingSenderId: "635519087873",
+  appId: "1:635519087873:web:3669e629e7c76f01971700"
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
 let products=JSON.parse(localStorage.getItem('sp_products')||'[]'); let cart=[]; let purchases=JSON.parse(localStorage.getItem('sp_pur')||'[]'); let sales=JSON.parse(localStorage.getItem('sp_sales')||'[]');
 
 auth.onAuthStateChanged(u=>{ if(u){ document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('dash').classList.remove('hidden'); document.getElementById('dashEmail').innerText=u.email; document.getElementById('uEmail').innerText=u.email; document.getElementById('loggedInfo').classList.remove('hidden'); document.getElementById('status').innerText='✅ LOGGED IN'; renderAll(); } else { document.getElementById('loginScreen').classList.remove('hidden'); document.getElementById('dash').classList.add('hidden'); }});
-
-function loginEmail(){ const e=document.getElementById('email').value, p=document.getElementById('pass').value; document.getElementById('status').innerText='Logging...'; auth.signInWithEmailAndPassword(e,p).catch(()=>auth.createUserWithEmailAndPassword(e,p)).catch(er=>document.getElementById('status').innerText=er.message); }
+function loginEmail(){ const e=document.getElementById('email').value, p=document.getElementById('pass').value; document.getElementById('status').innerText='Logging...'; auth.signInWithEmailAndPassword(e,p).catch(()=>auth.createUserWithEmailAndPassword(e,p).catch(er=>document.getElementById('status').innerText=er.message)).catch(er=>document.getElementById('status').innerText=er.message); }
 function loginGoogle(){ const pr=new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(pr).catch(er=>document.getElementById('status').innerText=er.message); }
 function logout(){ auth.signOut(); }
 function showMod(id){ document.querySelectorAll('.mod').forEach(m=>m.classList.add('hidden')); document.getElementById('mod-'+id).classList.remove('hidden'); }
 function saveProduct(){ const p={code:document.getElementById('prdCode').value||'PRD000125', name:document.getElementById('prdName').value||'Sample', cost:parseFloat(document.getElementById('prdCost').value||5), price:parseFloat(document.getElementById('prdPrice').value||10), opening:parseFloat(document.getElementById('prdStock').value||100), sold:0, received:0}; let i=products.findIndex(x=>x.code==p.code); if(i>=0){ p.sold=products[i].sold; p.received=products[i].received; products[i]=p;} else products.push(p); localStorage.setItem('sp_products',JSON.stringify(products)); renderAll(); alert('Saved '+p.code); }
-function savePurchase(){ const pur={id:document.getElementById('purId').value||'G001', supplier:document.getElementById('purSupplier').value, product:document.getElementById('purProduct').value||'PRD000125', qty:parseFloat(document.getElementById('purQty').value||10), date:new Date().toLocaleString()}; purchases.push(pur); let pr=products.find(x=>x.code==pur.product); if(pr){ pr.received+=pur.qty; } localStorage.setItem('sp_pur',JSON.stringify(purchases)); localStorage.setItem('sp_products',JSON.stringify(products)); renderAll(); alert('Purchase '+pur.id+' saved & GRN updated'); }
+function savePurchase(){ const pur={id:document.getElementById('purId').value||'G001', supplier:document.getElementById('purSupplier').value, product:document.getElementById('purProduct').value||'PRD000125', qty:parseFloat(document.getElementById('purQty').value||10), date:new Date().toLocaleString()}; purchases.push(pur); let pr=products.find(x=>x.code==pur.product); if(pr) pr.received+=pur.qty; localStorage.setItem('sp_pur',JSON.stringify(purchases)); localStorage.setItem('sp_products',JSON.stringify(products)); renderAll(); alert('Purchase '+pur.id+' saved & GRN updated'); }
 function addToCart(){ const code=document.getElementById('posBarcode').value||'PRD000125'; const qty=parseFloat(document.getElementById('posQty').value||1); let pr=products.find(x=>x.code==code); if(!pr){ alert('Product not found. Create in Products first.'); return; } let avail=pr.opening+pr.received-pr.sold; if(qty>avail){ alert('Low stock. Avail:'+avail); return; } cart.push({code, name:pr.name, price:pr.price, cost:pr.cost, qty}); renderCart(); }
 function renderCart(){ let t=0, pr=0, h=''; cart.forEach((c,i)=>{ t+=c.price*c.qty; pr+=(c.price-c.cost)*c.qty; h+=`${c.code} x${c.qty} $${(c.price*c.qty).toFixed(2)}<br>`; }); document.getElementById('cart').innerHTML=h||'Empty'; document.getElementById('cartTotal').innerText=t.toFixed(2); document.getElementById('cartProfit').innerText=pr.toFixed(2); }
 function checkout(){ if(cart.length==0){ alert('Cart empty'); return; } let total=0, cogs=0; cart.forEach(c=>{ total+=c.price*c.qty; cogs+=c.cost*c.qty; let pr=products.find(x=>x.code==c.code); if(pr) pr.sold+=c.qty; }); sales.push({date:new Date().toLocaleString(), total, cogs, profit:total-cogs, items:cart}); localStorage.setItem('sp_sales',JSON.stringify(sales)); localStorage.setItem('sp_products',JSON.stringify(products)); cart=[]; renderAll(); renderCart(); alert('Sale done. Profit $'+(total-cogs).toFixed(2)); }
-function renderAll(){ document.getElementById('prodList').innerHTML=products.map(p=>`${p.code} | ${p.name} | Stock:${p.opening+p.received-p.sold} = ${p.opening}+${p.received}-${p.sold} | $${p.price}<br>`).join(''); document.getElementById('purList').innerHTML=purchases.map(p=>`${p.id} | ${p.product} x${p.qty} | ${p.supplier} | ${p.date}<br>`).join(''); document.getElementById('grnList').innerHTML=purchases.map(p=>`GRN ${p.id} - ${p.product} Received ${p.qty}<br>`).join('')||'No GRN'; document.getElementById('stockList').innerHTML=products.map(p=>`${p.code} Opening:${p.opening} + Received:${p.received} - Sold:${p.sold} = <b>${p.opening+p.received-p.sold}</b><br>`).join(''); calcReports(); }
+function renderAll(){ document.getElementById('prodList').innerHTML=products.map(p=>`${p.code} | ${p.name} | Stock:${p.opening+p.received-p.sold} = ${p.opening}+${p.received}-${p.sold} | $${p.price}<br>`).join('')||'No products'; document.getElementById('purList').innerHTML=purchases.map(p=>`${p.id} | ${p.product} x${p.qty} | ${p.supplier} | ${p.date}<br>`).join('')||'No purchases'; document.getElementById('grnList').innerHTML=purchases.map(p=>`GRN ${p.id} - ${p.product} Received ${p.qty}<br>`).join('')||'No GRN'; document.getElementById('stockList').innerHTML=products.map(p=>`${p.code} Opening:${p.opening} + Received:${p.received} - Sold:${p.sold} = <b>${p.opening+p.received-p.sold}</b><br>`).join('')||'No stock'; calcReports(); }
 function calcReports(){ let s=sales.reduce((a,b)=>a+b.total,0); let c=sales.reduce((a,b)=>a+b.cogs,0); document.getElementById('reportData').innerHTML=`Net Sales: $${s.toFixed(2)} | COGS: $${c.toFixed(2)} | <b>Gross Profit: $${(s-c).toFixed(2)}</b><br>Total Sales Count: ${sales.length}`; }
 function saveCust(){ let n=document.getElementById('custName').value; if(!n) return; let arr=JSON.parse(localStorage.getItem('sp_cust')||'[]'); arr.push(n); localStorage.setItem('sp_cust',JSON.stringify(arr)); document.getElementById('custList').innerHTML=arr.join('<br>'); }
 function saveSup(){ let n=document.getElementById('supName').value; if(!n) return; let arr=JSON.parse(localStorage.getItem('sp_sup')||'[]'); arr.push(n); localStorage.setItem('sp_sup',JSON.stringify(arr)); document.getElementById('supList').innerHTML=arr.join('<br>'); }
 function toggleZimra(){ document.getElementById('zimraStatus').innerText=document.getElementById('zimraToggle').value; }
+if(products.length==0){ products=[{code:'PRD000125', name:'Demo Sugar 2kg', cost:5, price:10, opening:100, sold:0, received:0}]; localStorage.setItem('sp_products',JSON.stringify(products)); }
 </script>
 </body>
 </html>
