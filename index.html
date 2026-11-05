@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SmartPOS</title>
+<style>body{margin:0;font-family:sans-serif;background:#0f172a;color:white}header{background:#1e293b;padding:14px;display:flex;justify-content:space-between;align-items:center}button{background:#22c55e;border:0;padding:10px 14px;border-radius:8px;font-weight:700}input,select{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:0}.card{background:#1e293b;margin:12px;padding:14px;border-radius:12px}.row{display:flex;gap:10px}.box{flex:1;background:#334155;padding:12px;border-radius:10px;text-align:center}</style>
+</head><body>
+<header><b>SmartPOS</b><button onclick="show('menu')">☰ Menu</button></header>
+<div id="app"></div>
+<script>
+let P=JSON.parse(localStorage.getItem('p')||'[]');
+let S=JSON.parse(localStorage.getItem('s')||'[]');
+let view='home';
+function save(){localStorage.setItem('p',JSON.stringify(P));localStorage.setItem('s',JSON.stringify(S));}
+function show(v){view=v;render();}
+function addP(){let n=document.getElementById('n').value;let pr=+document.getElementById('pr').value;let q=+document.getElementById('q').value;if(!n)return alert('Enter name');P.push({n,pr,q});save();render();}
+function sell(i){if(P[i].q<=0)return alert('Out of stock');P[i].q--;S.push({n:P[i].n,pr:P[i].pr,d:new Date().toLocaleString()});save();render();}
+function render(){
+ let t=S.reduce((a,b)=>a+b.pr,0);
+ let h='<div class="card"><h2>Dashboard</h2><div class="row"><div class="box"><h3>'+t+'</h3><small>Total Sales $</small></div><div class="box"><h3>'+S.length+'</h3><small>Sales</small></div><div class="box"><h3>'+P.length+'</h3><small>Products</small></div></div></div>';
+ let m='';
+ if(view=='menu'){m='<div class="card"><h3>Menu</h3><button onclick="show(\'home\')">Dashboard</button><br><br><button onclick="show(\'add\')">Add Product</button><br><br><button onclick="show(\'sales\')">Sales History</button></div>';}
+ if(view=='add'){m='<div class="card"><h3>Add Product</h3><input id="n" placeholder="Product name"><input id="pr" type="number" placeholder="Price $"><input id="q" type="number" placeholder="Qty"><button onclick="addP()">Save Product</button></div>';}
+ if(view=='sales'){m='<div class="card"><h3>Sales History</h3>'+(S.length==0?'No sales yet':S.map(x=>'<p>'+x.n+' - $'+x.pr+' - '+x.d+'</p>').join(''))+'</div>';}
+ let list='<div class="card"><h3>Products</h3>'+(P.length==0?'No products yet. Tap Menu > Add Product':P.map((p,i)=>'<p>'+p.n+' - $'+p.pr+' - Stock: '+p.q+' <button onclick="sell('+i+')">Sell</button></p>').join(''))+'</div>';
+ document.getElementById('app').innerHTML=h+m+list;
+}
+render();
+</script></body></html>
