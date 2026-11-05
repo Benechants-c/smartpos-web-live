@@ -1,8 +1,52 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SmartPOS V6 LITE</title>
-<style>body{margin:0;font-family:sans-serif;background:#0f172a;color:#fff}button{border:0;border-radius:10px;background:#22c55e;color:#fff;font-weight:bold} .card{background:#1e293b;padding:14px;border-radius:12px;margin-bottom:10px}</style></head>
-<body><div id="app" style="padding:12px"><h2>Loading... LITE</h2></div>
-<script src="lite-all-14.js"></script>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SmartPOS BACK OFFICE LIVE</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:#0f172a;color:#fff;display:flex}
+#sidebar{width:260px;min-height:100vh;background:#0f172a;padding:12px;flex-shrink:0}
+#sidebar h2{font-size:19px;margin:6px 0 10px}
+.topbar{background:#14532d;color:#4ade80;padding:10px;border-radius:8px;font-size:13px;margin-bottom:12px}
+.menu button{display:block;width:100%;text-align:left;background:#1e293b;color:#fff;border:0;padding:13px 12px;margin-bottom:8px;border-radius:12px;font-size:15px;cursor:pointer}
+.menu button.active{background:#2563eb}
+#main{flex:1;padding:14px;background:#0f172a;min-height:100vh}
+.card{background:#1e293b;padding:14px;border-radius:12px;margin-bottom:10px}
+input,select{width:100%;padding:12px;border-radius:8px;border:0;margin:6px 0}
+.btn{background:#22c55e;color:#fff;border:0;padding:14px;border-radius:10px;width:100%;font-weight:bold;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:8px;border-bottom:1px solid #334155;text-align:left}
+@media(max-width:700px){#sidebar{width:230px;position:fixed;z-index:10;left:-240px;transition:.2s}#sidebar.open{left:0}#main{width:100%}#menuBtn{display:block!important}}
+</style></head>
+<body>
+<div id="sidebar">
+<h2>SmartPOS BACK OFFICE LIVE</h2>
+<div class="topbar" id="shopBar">SHOP001-HRE | 80mm Thermal | ZIMRA OFF</div>
+<div class="menu" id="menu"></div>
+</div>
+<div id="main"><button id="menuBtn" onclick="document.getElementById('sidebar').classList.toggle('open')" style="display:none;background:#2563eb;color:#fff;border:0;padding:10px 14px;border-radius:8px;margin-bottom:10px">☰ Menu</button><div id="app"></div></div>
 <script>
-// If lite file fails, show buttons anyway - never black screen
-setTimeout(()=>{ if(document.getElementById('app').innerHTML.length < 100){ document.getElementById('app').innerHTML='<h2>SmartPOS V6 LITE</h2><p>Tap a module:</p>'+['dashboard','pos','products','purchasing','grn','sales','stock','customers','suppliers','expenses','reports','users','branches','audit','settings'].map(m=>`<button onclick="renderModule('${m}')" style="padding:16px;width:100%;margin-bottom:8px">${m.toUpperCase()}</button>`).join(''); } },800);
+const MENU=[['dashboard','📊 1. Dashboard'],['pos','🛒 2. POS / New Sale'],['products','📦 3. Products PRD'],['purchasing','🛍️ 4. Purchasing PO'],['grn','📥 5. GRN - Receive'],['sales','🧾 6. Sales / Receipts'],['stock','📋 Stock Take'],['customers','👥 7. Customers'],['suppliers','🏭 8. Suppliers'],['expenses','💸 9. Expenses & Cash'],['reports','📈 10. Reports Profit'],['users','👤 11. Users'],['branches','🏢 12. Branches'],['audit','📜 13. Audit Log'],['settings','⚙️ 14. Settings & ZIMRA']];
+function liteGet(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return[]}}
+function liteSave(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function liteAdd(key,fields){let o={};for(let f of fields){let v=prompt(f+':');if(v===null)return;o[f]=v}o.date=new Date().toLocaleString();let a=liteGet(key);a.push(o);liteSave(key,a);renderModule(window._cur)}
+function liteTable(arr,cols){if(!arr.length)return'<p style="color:#94a3b8">No records yet. Tap + Add.</p>';let h=cols.map(c=>'<th>'+c+'</th>').join('');let r=arr.map(x=>'<tr>'+cols.map(c=>'<td>'+(x[c]||'')+'</td>').join('')+'</tr>').join('');return'<table><tr>'+h+'</tr>'+r+'</table>'}
+function renderMenu(active){document.getElementById('menu').innerHTML=MENU.map(m=>`<button class="${m[0]===active?'active':''}" onclick="renderModule('${m[0]}')">${m[1]}</button>`).join('')}
+function renderModule(id){
+window._cur=id; renderMenu(id);
+document.getElementById('sidebar').classList.remove('open');
+let el=document.getElementById('app'); let b='';
+if(id==='dashboard'){let p=liteGet('v6_products'),c=liteGet('v6_customers'),s=liteGet('v6_suppliers'),sa=liteGet('v6_sales');b=`<h2>Dashboard</h2><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><div class="card">Products<br><b>${p.length}</b></div><div class="card">Customers<br><b>${c.length}</b></div><div class="card">Suppliers<br><b>${s.length}</b></div></div><div class="card">Sales Records: <b>${sa.length}</b><br>Shop: SHOP001-HRE</div><button class="btn" onclick="renderModule('pos')">+ New Sale</button>`}
+else if(id==='pos'){b=`<h2>POS / New Sale</h2><button class="btn" onclick="liteAdd('v6_sales',['Product','Qty','Price'])">+ New Sale</button><div class="card">${liteTable(liteGet('v6_sales'),['Product','Qty','Price','date'])}</div><button class="btn" onclick="window.print()">Print Receipt</button>`}
+else if(id==='products'){b=`<h2>Products PRD</h2><button class="btn" onclick="liteAdd('v6_products',['Name','Price','Qty'])">+ Add Product</button><div class="card">${liteTable(liteGet('v6_products'),['Name','Price','Qty'])}</div>`}
+else if(id==='purchasing'){b=`<h2>Purchasing PO</h2><button class="btn" onclick="liteAdd('v6_po',['Supplier','Item','Qty','Cost'])">+ New PO</button><div class="card">${liteTable(liteGet('v6_po'),['Supplier','Item','Qty','Cost','date'])}</div>`}
+else if(id==='grn'){b=`<h2>GRN - Receive</h2><button class="btn" onclick="liteAdd('v6_grn',['PO No','Item','Qty Received'])">+ Receive GRN</button><div class="card">${liteTable(liteGet('v6_grn'),['PO No','Item','Qty Received','date'])}</div>`}
+else if(id==='sales'){b=`<h2>Sales / Receipts</h2><div class="card">${liteTable(liteGet('v6_sales'),['Product','Qty','Price','date'])}</div><button class="btn" onclick="window.print()">Print</button>`}
+else if(id==='stock'){b=`<h2>Stock Take</h2><button class="btn" onclick="liteAdd('v6_stock',['Product','Counted Qty','System Qty'])">+ Stock Count</button><div class="card">${liteTable(liteGet('v6_stock'),['Product','Counted Qty','System Qty','date'])}</div>`}
+else if(id==='customers'){b=`<h2>Customers</h2><button class="btn" onclick="liteAdd('v6_customers',['Name','Phone','Balance'])">+ Add Customer</button><div class="card">${liteTable(liteGet('v6_customers'),['Name','Phone','Balance'])}</div>`}
+else if(id==='suppliers'){b=`<h2>Suppliers</h2><button class="btn" onclick="liteAdd('v6_suppliers',['Name','Phone','Balance'])">+ Add Supplier</button><div class="card">${liteTable(liteGet('v6_suppliers'),['Name','Phone','Balance'])}</div>`}
+else if(id==='expenses'){b=`<h2>Expenses & Cash</h2><button class="btn" onclick="liteAdd('v6_expenses',['Description','Amount','Type'])">+ Add Expense</button><div class="card">${liteTable(liteGet('v6_expenses'),['Description','Amount','Type','date'])}</div>`}
+else if(id==='reports'){let s=liteGet('v6_sales'),e=liteGet('v6_expenses');let ts=s.reduce((a,x)=>a+(parseFloat(x.Price)||0)*(parseFloat(x.Qty)||1),0);let te=e.reduce((a,x)=>a+(parseFloat(x.Amount)||0),0);b=`<h2>Reports Profit</h2><div class="card">Sales: $${ts.toFixed(2)}<br>Expenses: $${te.toFixed(2)}<br><b>Profit: $${(ts-te).toFixed(2)}</b></div><button class="btn" onclick="window.print()">Print Report</button>`}
+else if(id==='users'){b=`<h2>Users</h2><button class="btn" onclick="liteAdd('v6_users',['Username','Role','PIN'])">+ Add User</button><div class="card">${liteTable(liteGet('v6_users'),['Username','Role','PIN'])}</div>`}
+else if(id==='branches'){b=`<h2>Branches</h2><button class="btn" onclick="liteAdd('v6_branches',['Branch Name','Location','Phone'])">+ Add Branch</button><div class="card">${liteTable(liteGet('v6_branches'),['Branch Name','Location','Phone'])}</div>`}
+else if(id==='audit'){b=`<h2>Audit Log</h2><button class="btn" onclick="liteAdd('v6_audit',['Action','User'])">+ Add Log</button><div class="card">${liteTable(liteGet('v6_audit'),['Action','User','date'])}</div>`}
+else if(id==='settings'){b=`<h2>Settings & ZIMRA</h2><div class="card"><label>Shop Name</label><input id="shopName" value="${localStorage.getItem('v6_shop')||'SHOP001-HRE'}"><label>ZIMRA</label><select id="zimra"><option>OFF</option><option>ON</option></select><button class="btn" onclick="localStorage.setItem('v6_shop',document.getElementById('shopName').value);document.getElementById('shopBar').innerText=document.getElementById('shopName').value+' | 80mm Thermal | ZIMRA '+document.getElementById('zimra').value;alert('Saved')">Save Settings</button></div>`}
+el.innerHTML=b;
+}
+renderModule('dashboard');
 </script></body></html>
