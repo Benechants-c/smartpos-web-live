@@ -567,4 +567,5 @@ function printReport(type){logAudit('Print '+type);window.print();}
 function exportPDF(type){logAudit('PDF '+type);alert('Use Print -> Save as PDF for '+type);window.print();}
 function downloadBackup(){const data={products,pos,grns,heldSales,customers,suppliers,purchaseOrders,settings,audit,stockTakes,categories,version:'V6 STAGE 1 - 144 Actions'};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='SmartPOS-V6-STAGE1-144-Actions.json';a.click();logAudit('Download Backup');}
 </script>
-<script src="stage2.js"></script></body></html>
+<script src="stage2.js"></script>
+<script src="lite-all-14.js"></script></body></html>
