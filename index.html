@@ -1,27 +1,67 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SmartPOS</title>
-<style>body{margin:0;font-family:sans-serif;background:#0f172a;color:white}header{background:#1e293b;padding:14px;display:flex;justify-content:space-between;align-items:center}button{background:#22c55e;border:0;padding:10px 14px;border-radius:8px;font-weight:700}input,select{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:0}.card{background:#1e293b;margin:12px;padding:14px;border-radius:12px}.row{display:flex;gap:10px}.box{flex:1;background:#334155;padding:12px;border-radius:10px;text-align:center}</style>
-</head><body>
-<header><b>SmartPOS</b><button onclick="show('menu')">☰ Menu</button></header>
-<div id="app"></div>
+<title>SmartPOS BACK OFFICE LIVE</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:#0f172a;color:#fff}
+.top{background:#1e293b;padding:12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.top b{font-size:18px}.badge{background:#14532d;color:#4ade80;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:700}
+.menuBtn{background:#22c55e;border:0;padding:10px 14px;border-radius:8px;font-weight:800;cursor:pointer}
+.side{position:fixed;top:0;left:0;bottom:0;width:300px;max-width:85%;background:#0f172a;z-index:20;transform:translateX(-105%);transition:.2s;overflow:auto;padding:12px;border-right:1px solid #334155}
+.side.open{transform:none}.side h3{margin:6px 4px}.side button{display:block;width:100%;text-align:left;background:#1e293b;color:#fff;border:0;padding:12px;border-radius:10px;margin:6px 0;font-size:15px;cursor:pointer}.side button.active{background:#2563eb}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:15}.overlay.show{display:block}
+.main{padding:12px}.card{background:#1e293b;padding:14px;border-radius:12px;margin:10px 0}.row{display:flex;gap:10px;flex-wrap:wrap}.box{flex:1;min-width:100px;background:#334155;padding:12px;border-radius:10px;text-align:center}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:0;background:#fff;color:#000}button.btn{background:#22c55e;border:0;padding:12px 14px;border-radius:8px;font-weight:800;cursor:pointer;margin:4px 2px}button.btn2{background:#2563eb;color:#fff;border:0;padding:10px 12px;border-radius:8px;cursor:pointer;margin:2px}button.danger{background:#dc2626;color:#fff;border:0;padding:8px 10px;border-radius:8px;cursor:pointer}table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid #334155;padding:8px;text-align:left}small{color:#cbd5e1}.receipt{background:#fff;color:#000;padding:14px;border-radius:8px;font-family:monospace}
+</style></head><body>
+<div class="top"><b>SmartPOS BACK OFFICE LIVE</b><button class="menuBtn" onclick="toggleMenu()">☰ Menu</button></div>
+<div style="padding:0 12px"><div class="badge" id="shopBadge">SHOP001-HRE | 80mm Thermal | ZIMRA OFF</div></div>
+<div class="overlay" id="ov" onclick="toggleMenu()"></div>
+<div class="side" id="side"></div>
+<div class="main" id="app"></div>
 <script>
-let P=JSON.parse(localStorage.getItem('p')||'[]');
-let S=JSON.parse(localStorage.getItem('s')||'[]');
-let view='home';
-function save(){localStorage.setItem('p',JSON.stringify(P));localStorage.setItem('s',JSON.stringify(S));}
-function show(v){view=v;render();}
-function addP(){let n=document.getElementById('n').value;let pr=+document.getElementById('pr').value;let q=+document.getElementById('q').value;if(!n)return alert('Enter name');P.push({n,pr,q});save();render();}
-function sell(i){if(P[i].q<=0)return alert('Out of stock');P[i].q--;S.push({n:P[i].n,pr:P[i].pr,d:new Date().toLocaleString()});save();render();}
+let DB=JSON.parse(localStorage.getItem('smartpos_db')||'null')||{products:[{id:1,code:'PRD001',name:'Coca-Cola 500ml',price:1.5,cost:1,qty:20,cat:'Drinks'}],sales:[],customers:[{id:1,name:'Walk-in',phone:''}],suppliers:[],pos:[],grns:[],expenses:[],users:[{id:1,name:'Admin',role:'Admin'}],branches:[{id:1,name:'SHOP001-HRE'}],audit:[],settings:{shop:'SHOP001-HRE',thermal:'80mm',zimra:false}};
+let view='dashboard';let cart=[];
+function save(){localStorage.setItem('smartpos_db',JSON.stringify(DB));}
+function log(msg){DB.audit.unshift({d:new Date().toLocaleString(),m:msg});save();}
+function toggleMenu(){let s=document.getElementById('side');s.classList.toggle('open');document.getElementById('ov').classList.toggle('show');}
+function go(v){view=v;toggleMenu();render();}
+function money(n){return '$'+Number(n||0).toFixed(2)}
+function buildMenu(){
+let items=[['dashboard','📊 1. Dashboard'],['pos','🛒 2. POS / New Sale'],['products','📦 3. Products PRD'],['purchasing','🛍️ 4. Purchasing PO'],['grn','📥 5. GRN - Receive'],['sales','🧾 6. Sales / Receipts'],['stocktake','📋 Stock Take'],['customers','👥 7. Customers'],['suppliers','🏭 8. Suppliers'],['expenses','💸 9. Expenses & Cash'],['reports','📈 10. Reports Profit'],['users','👤 11. Users'],['branches','🏢 12. Branches'],['audit','📜 13. Audit Log'],['settings','⚙️ 14. Settings & ZIMRA']];
+document.getElementById('side').innerHTML='<h3>SmartPOS BACK OFFICE LIVE</h3><div class="badge">'+DB.settings.shop+' | '+DB.settings.thermal+' Thermal | ZIMRA '+(DB.settings.zimra?'ON':'OFF')+'</div>'+items.map(i=>'<button class="'+(view==i[0]?'active':'')+'" onclick="go(\''+i[0]+'\')">'+i[1]+'</button>').join('')+'<button onclick="toggleMenu()">✖ Close</button>';
+}
+function addProduct(){let n=document.getElementById('pn').value.trim();let pr=+document.getElementById('pp').value||0;let c=+document.getElementById('pc').value||0;let q=+document.getElementById('pq').value||0;if(!n)return alert('Enter product name');DB.products.push({id:Date.now(),code:'PRD'+String(DB.products.length+1).padStart(3,'0'),name:n,price:pr,cost:c,qty:q,cat:'General'});log('Added product '+n);save();render();}
+function delProduct(id){DB.products=DB.products.filter(p=>p.id!=id);log('Deleted product');save();render();}
+function addToCart(id){let p=DB.products.find(x=>x.id==id);if(!p||p.qty<=0)return alert('Out of stock');let f=cart.find(x=>x.id==id);if(f)f.qty++;else cart.push({id:p.id,name:p.name,price:p.price,qty:1});render();}
+function cartTotal(){return cart.reduce((a,b)=>a+b.price*b.qty,0)}
+function checkout(){if(!cart.length)return alert('Cart empty');let total=cartTotal();cart.forEach(c=>{let p=DB.products.find(x=>x.id==c.id);if(p)p.qty-=c.qty});let sale={id:Date.now(),items:JSON.parse(JSON.stringify(cart)),total,d:new Date().toLocaleString()};DB.sales.unshift(sale);log('Sale '+money(total));cart=[];save();render();alert('Sale saved! Total '+money(total));}
+function receiveGRN(){let pid=+document.getElementById('grnP').value;let q=+document.getElementById('grnQ').value||0;let p=DB.products.find(x=>x.id==pid);if(!p)return; p.qty+=q;DB.grns.unshift({d:new Date().toLocaleString(),name:p.name,qty:q});log('GRN Received '+p.name+' x'+q);save();render();}
+function addCustomer(){let n=document.getElementById('cuN').value.trim();if(!n)return;DB.customers.push({id:Date.now(),name:n,phone:document.getElementById('cuP').value});log('Added customer '+n);save();render();}
+function addSupplier(){let n=document.getElementById('suN').value.trim();if(!n)return;DB.suppliers.push({id:Date.now(),name:n,phone:document.getElementById('suP').value});log('Added supplier '+n);save();render();}
+function addPO(){let n=document.getElementById('poN').value.trim();let q=+document.getElementById('poQ').value||0;if(!n)return;DB.pos.push({id:Date.now(),name:n,qty:q,d:new Date().toLocaleString(),status:'Pending'});log('Created PO '+n);save();render();}
+function addExpense(){let n=document.getElementById('exN').value.trim();let a=+document.getElementById('exA').value||0;if(!n)return;DB.expenses.push({id:Date.now(),name:n,amt:a,d:new Date().toLocaleString()});log('Expense '+n+' '+money(a));save();render();}
+function addUser(){let n=document.getElementById('uN').value.trim();if(!n)return;DB.users.push({id:Date.now(),name:n,role:document.getElementById('uR').value});log('Added user '+n);save();render();}
+function addBranch(){let n=document.getElementById('bN').value.trim();if(!n)return;DB.branches.push({id:Date.now(),name:n});log('Added branch '+n);save();render();}
+function saveSettings(){DB.settings.shop=document.getElementById('sShop').value||DB.settings.shop;DB.settings.thermal=document.getElementById('sThermal').value;DB.settings.zimra=document.getElementById('sZimra').value=='ON';document.getElementById('shopBadge').innerText=DB.settings.shop+' | '+DB.settings.thermal+' Thermal | ZIMRA '+(DB.settings.zimra?'ON':'OFF');log('Updated Settings');save();render();alert('Settings saved');}
 function render(){
- let t=S.reduce((a,b)=>a+b.pr,0);
- let h='<div class="card"><h2>Dashboard</h2><div class="row"><div class="box"><h3>'+t+'</h3><small>Total Sales $</small></div><div class="box"><h3>'+S.length+'</h3><small>Sales</small></div><div class="box"><h3>'+P.length+'</h3><small>Products</small></div></div></div>';
- let m='';
- if(view=='menu'){m='<div class="card"><h3>Menu</h3><button onclick="show(\'home\')">Dashboard</button><br><br><button onclick="show(\'add\')">Add Product</button><br><br><button onclick="show(\'sales\')">Sales History</button></div>';}
- if(view=='add'){m='<div class="card"><h3>Add Product</h3><input id="n" placeholder="Product name"><input id="pr" type="number" placeholder="Price $"><input id="q" type="number" placeholder="Qty"><button onclick="addP()">Save Product</button></div>';}
- if(view=='sales'){m='<div class="card"><h3>Sales History</h3>'+(S.length==0?'No sales yet':S.map(x=>'<p>'+x.n+' - $'+x.pr+' - '+x.d+'</p>').join(''))+'</div>';}
- let list='<div class="card"><h3>Products</h3>'+(P.length==0?'No products yet. Tap Menu > Add Product':P.map((p,i)=>'<p>'+p.n+' - $'+p.pr+' - Stock: '+p.q+' <button onclick="sell('+i+')">Sell</button></p>').join(''))+'</div>';
- document.getElementById('app').innerHTML=h+m+list;
+buildMenu();
+let totalSales=DB.sales.reduce((a,b)=>a+b.total,0);let totalCost=DB.sales.reduce((a,s)=>a+s.items.reduce((x,i)=>x+((DB.products.find(p=>p.id==i.id)?.cost||0)*i.qty),0),0);let totalExp=DB.expenses.reduce((a,b)=>a+b.amt,0);let profit=totalSales-totalCost-totalExp;
+let h='';
+if(view=='dashboard'){h='<div class="card"><h2>Dashboard</h2><div class="row"><div class="box"><h2>'+money(totalSales)+'</h2><small>Total Sales</small></div><div class="box"><h2>'+DB.sales.length+'</h2><small>Sales</small></div><div class="box"><h2>'+DB.products.length+'</h2><small>Products</small></div><div class="box"><h2>'+money(profit)+'</h2><small>Profit</small></div></div><p>Shop: '+DB.settings.shop+' | Low stock: '+(DB.products.filter(p=>p.qty<5).map(p=>p.name).join(', ')||'None')+'</p><button class="btn" onclick="go(\'pos\')">+ New Sale</button><button class="btn2" onclick="go(\'products\')">Manage Products</button></div>';}
+if(view=='pos'){h='<div class="card"><h2>POS / New Sale</h2>'+DB.products.map(p=>'<p>'+p.name+' - '+money(p.price)+' - Stock: '+p.qty+' <button class="btn2" onclick="addToCart('+p.id+')">Add</button></p>').join('')+'</div><div class="card"><h3>Cart</h3>'+(cart.length?cart.map(c=>'<p>'+c.name+' x'+c.qty+' = '+money(c.price*c.qty)+'</p>').join(''):'Cart empty')+'<h3>Total: '+money(cartTotal())+'</h3><button class="btn" onclick="checkout()">Checkout / Print Receipt</button></div>';}
+if(view=='products'){h='<div class="card"><h2>Products PRD</h2><input id="pn" placeholder="Product name"><input id="pp" type="number" placeholder="Selling Price $"><input id="pc" type="number" placeholder="Cost $"><input id="pq" type="number" placeholder="Qty"><button class="btn" onclick="addProduct()">Save Product</button></div><div class="card"><table><tr><th>Code</th><th>Name</th><th>Price</th><th>Stock</th><th></th></tr>'+DB.products.map(p=>'<tr><td>'+p.code+'</td><td>'+p.name+'</td><td>'+money(p.price)+'</td><td>'+p.qty+'</td><td><button class="danger" onclick="delProduct('+p.id+')">Delete</button></td></tr>').join('')+'</table></div>';}
+if(view=='purchasing'){h='<div class="card"><h2>Purchasing PO</h2><input id="poN" placeholder="Item to order"><input id="poQ" type="number" placeholder="Qty"><button class="btn" onclick="addPO()">Create PO</button></div><div class="card"><h3>Purchase Orders</h3>'+(DB.pos.length?DB.pos.map(o=>'<p>'+o.name+' x'+o.qty+' - '+o.status+' - '+o.d+'</p>').join(''):'No POs yet')+'</div>';}
+if(view=='grn'){h='<div class="card"><h2>GRN - Receive</h2><select id="grnP">'+DB.products.map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join('')+'</select><input id="grnQ" type="number" placeholder="Qty Received"><button class="btn" onclick="receiveGRN()">Receive Stock</button></div><div class="card"><h3>GRN History</h3>'+(DB.grns.length?DB.grns.map(g=>'<p>'+g.name+' +'+g.qty+' - '+g.d+'</p>').join(''):'No GRNs yet')+'</div>';}
+if(view=='sales'){h='<div class="card"><h2>Sales / Receipts</h2>'+(DB.sales.length?DB.sales.map(s=>'<div class="receipt"><b>SmartPOS - '+DB.settings.shop+'</b><br>'+s.d+'<br>'+s.items.map(i=>i.name+' x'+i.qty+' = '+money(i.price*i.qty)).join('<br>')+'<br><b>Total: '+money(s.total)+'</b><br>Thank you!</div><br>'): 'No sales yet')+'</div>';}
+if(view=='stocktake'){h='<div class="card"><h2>Stock Take</h2><table><tr><th>Product</th><th>System Stock</th><th>Status</th></tr>'+DB.products.map(p=>'<tr><td>'+p.name+'</td><td>'+p.qty+'</td><td>'+(p.qty<5?'⚠️ LOW':'✅ OK')+'</td></tr>').join('')+'</table><p>Count physical stock and compare. Use GRN to adjust up.</p></div>';}
+if(view=='customers'){h='<div class="card"><h2>Customers</h2><input id="cuN" placeholder="Customer name"><input id="cuP" placeholder="Phone"><button class="btn" onclick="addCustomer()">Add Customer</button></div><div class="card">'+DB.customers.map(c=>'<p>'+c.name+' - '+c.phone+'</p>').join('')+'</div>';}
+if(view=='suppliers'){h='<div class="card"><h2>Suppliers</h2><input id="suN" placeholder="Supplier name"><input id="suP" placeholder="Phone"><button class="btn" onclick="addSupplier()">Add Supplier</button></div><div class="card">'+DB.suppliers.map(s=>'<p>'+s.name+' - '+s.phone+'</p>').join('')+'</div>';}
+if(view=='expenses'){h='<div class="card"><h2>Expenses & Cash</h2><p>Total Sales: '+money(totalSales)+' | Expenses: '+money(totalExp)+' | Cash in Hand: '+money(totalSales-totalExp)+'</p><input id="exN" placeholder="Expense e.g Rent"><input id="exA" type="number" placeholder="Amount $"><button class="btn" onclick="addExpense()">Add Expense</button></div><div class="card">'+DB.expenses.map(e=>'<p>'+e.name+' - '+money(e.amt)+' - '+e.d+'</p>').join('')+'</div>';}
+if(view=='reports'){h='<div class="card"><h2>Reports Profit</h2><div class="row"><div class="box"><h3>'+money(totalSales)+'</h3><small>Sales</small></div><div class="box"><h3>'+money(totalExp)+'</h3><small>Expenses</small></div><div class="box"><h3>'+money(profit)+'</h3><small>Net Profit</small></div></div><p>Sales count: '+DB.sales.length+' | Products: '+DB.products.length+' | Customers: '+DB.customers.length+'</p></div>';}
+if(view=='users'){h='<div class="card"><h2>Users</h2><input id="uN" placeholder="User name"><select id="uR"><option>Cashier</option><option>Admin</option></select><button class="btn" onclick="addUser()">Add User</button></div><div class="card">'+DB.users.map(u=>'<p>'+u.name+' - '+u.role+'</p>').join('')+'</div>';}
+if(view=='branches'){h='<div class="card"><h2>Branches</h2><input id="bN" placeholder="Branch name e.g SHOP002-BYO"><button class="btn" onclick="addBranch()">Add Branch</button></div><div class="card">'+DB.branches.map(b=>'<p>'+b.name+'</p>').join('')+'</div>';}
+if(view=='audit'){h='<div class="card"><h2>Audit Log</h2>'+(DB.audit.length?DB.audit.map(a=>'<p><small>'+a.d+'</small> - '+a.m+'</p>').join(''):'No activity yet')+'</div>';}
+if(view=='settings'){h='<div class="card"><h2>Settings & ZIMRA</h2><label>Shop Name</label><input id="sShop" value="'+DB.settings.shop+'"><label>Thermal Size</label><select id="sThermal"><option>80mm</option><option>58mm</option></select><label>ZIMRA</label><select id="sZimra"><option>OFF</option><option>ON</option></select><button class="btn" onclick="saveSettings()">Save Settings</button><p>ZIMRA OFF = normal receipt. ZIMRA ON = fiscal receipt mode (for future).</p></div>';}
+document.getElementById('app').innerHTML=h;window.scrollTo(0,0);
 }
 render();
 </script></body></html>
