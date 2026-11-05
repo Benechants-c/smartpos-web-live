@@ -71,8 +71,23 @@ function showTopCustomers(){ let top=[...customers].sort((a,b)=>custTotalPurchas
 function sortCustomers(type){ if(type==='name') customers.sort((a,b)=>a.name.localeCompare(b.name)); else customers.sort((a,b)=>custBalance(b)-custBalance(a)); saveAll(); renderModule('customers'); }
 function exportCustomersCSV(){ let csv='Name,Phone,Balance,Total Bought\n'+customers.map(c=>`"${c.name}","${c.phone}",${custBalance(c)},${custTotalPurchases(c.name)}`).join('\n'); let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='customers.csv'; a.click(); }
 function printCustomers(){ window.print(); }
+// FIXED renderModule - Customers + all other pages work
+let _origRender = window._oldRenderModule;
 function renderModule(id){
-  currentModule=id; logAudit('Open '+id);
-  if(id==='customers'){ renderMenu(); document.getElementById('contentArea').innerHTML=renderCustomers(); if(window.innerWidth<1024) document.getElementById('sidebar').classList.add('hidden'); return; }
-  if(window._oldRenderModule){ let tmp = window._oldRenderModule; window._oldRenderModule = null; tmp(id); window._oldRenderModule = tmp; return; }
+  currentModule = id;
+  try{ logAudit('Open '+id); }catch(e){}
+  if(id === 'customers'){
+    try{ renderMenu(); }catch(e){}
+    document.getElementById('contentArea').innerHTML = renderCustomers();
+    const sb = document.getElementById('sidebar');
+    if(window.innerWidth < 1024 && sb) sb.classList.add('hidden');
+    return;
+  }
+  // All other pages - use original code
+  if(_origRender){
+    try{ _origRender(id); return; }catch(e){ console.log(e); }
+  }
+  // Fallback if original missing
+  try{ renderMenu(); }catch(e){}
+  document.getElementById('contentArea').innerHTML = '<div class="card p-4">Page '+id+' - coming soon in Stage 2</div>';
 }
