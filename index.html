@@ -1,59 +1,70 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SmartPOS BACK OFFICE LIVE</title>
-<style>body{margin:0;font-family:sans-serif;background:#0f172a;color:#fff}.top{background:#1e293b;padding:12px;display:flex;justify-content:space-between;align-items:center}.badge{background:#14532d;color:#4ade80;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:700;margin:0 12px}.menuBtn{background:#22c55e;border:0;padding:10px 14px;border-radius:8px;font-weight:800}.side{position:fixed;top:0;left:0;bottom:0;width:300px;max-width:85%;background:#0f172a;z-index:20;transform:translateX(-105%);transition:.2s;overflow:auto;padding:12px}.side.open{transform:none}.side button{display:block;width:100%;text-align:left;background:#1e293b;color:#fff;border:0;padding:12px;border-radius:10px;margin:6px 0;font-size:15px}.side button.active{background:#2563eb}.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:15}.ov.show{display:block}.main{padding:12px}.card{background:#1e293b;padding:14px;border-radius:12px;margin:10px 0}.row{display:flex;gap:10px;flex-wrap:wrap}.box{flex:1;min-width:100px;background:#334155;padding:12px;border-radius:10px;text-align:center}input,select{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:0}button.btn{background:#22c55e;border:0;padding:12px;border-radius:8px;font-weight:800;margin:4px 2px}button.btn2{background:#2563eb;color:#fff;border:0;padding:10px;border-radius:8px;margin:2px}</style></head><body>
-<div class="top"><b>SmartPOS BACK OFFICE LIVE</b><button class="menuBtn" onclick="toggleMenu()">☰ Menu</button></div>
-<div class="badge">SHOP001-HRE | 80mm Thermal | ZIMRA OFF</div>
-<div class="ov" id="ov" onclick="toggleMenu()"></div>
-<div class="side" id="side"></div>
-<div class="main" id="app"><div class="card"><h2>Loading...</h2></div></div>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:#0f172a;color:#fff;padding-bottom:30px}
+.top{background:#1e293b;padding:14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.top b{font-size:17px}.badge{background:#14532d;color:#4ade80;padding:7px 10px;border-radius:8px;font-size:12px;font-weight:700;margin:12px;display:inline-block}
+.main{padding:12px}.card{background:#1e293b;padding:16px;border-radius:14px;margin:12px 0}.card h2{margin:0 0 10px}.card h3{margin:10px 0}
+.menuBtn2{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#1e293b;color:#fff;border:0;padding:16px;border-radius:12px;margin:8px 0;font-size:17px;cursor:pointer}
+.menuBtn2 span{font-size:22px}.menuBtn2 small{display:block;color:#94a3b8;font-size:13px;font-weight:400}
+.back{background:#334155;color:#fff;border:0;padding:10px 14px;border-radius:8px;margin-bottom:10px;cursor:pointer}
+.row{display:flex;gap:10px;flex-wrap:wrap}.box{flex:1;min-width:105px;background:#334155;padding:14px;border-radius:12px;text-align:center}.box h2{margin:0}.box small{color:#cbd5e1}
+input,select{width:100%;padding:13px;margin:7px 0;border-radius:10px;border:0;background:#fff;color:#000;font-size:15px}
+button.btn{background:#22c55e;border:0;padding:13px 16px;border-radius:10px;font-weight:800;cursor:pointer;margin:5px 2px;width:100%}button.btn2{background:#2563eb;color:#fff;border:0;padding:11px 12px;border-radius:9px;cursor:pointer;margin:3px}button.del{background:#dc2626;color:#fff;border:0;padding:9px 11px;border-radius:8px;cursor:pointer}
+.item{background:#0f172a;padding:12px;border-radius:10px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item b{font-size:15px}.item small{color:#94a3b8}
+.receipt{background:#fff;color:#000;padding:14px;border-radius:10px;margin:10px 0;font-family:monospace}
+.topMenu{background:#22c55e;border:0;padding:10px 14px;border-radius:8px;font-weight:800}
+</style></head><body>
+<div class="top"><b>SmartPOS BACK OFFICE LIVE</b><button class="topMenu" onclick="go('home')">☰ Menu</button></div>
+<div style="text-align:center"><span class="badge" id="shopBadge">SHOP001-HRE | 80mm Thermal | ZIMRA OFF</span></div>
+<div class="main" id="app"></div>
 <script>
-try{
-var view='dashboard';
-var P=[]; try{P=JSON.parse(localStorage.getItem('sp_p')||'[]'); if(!Array.isArray(P)) P=[];}catch(e){P=[];}
-var S=[]; try{S=JSON.parse(localStorage.getItem('sp_s')||'[]'); if(!Array.isArray(S)) S=[];}catch(e){S=[];}
-var C=[]; try{C=JSON.parse(localStorage.getItem('sp_c')||'[]'); if(!Array.isArray(C)) C=[];}catch(e){C=[];}
-var E=[]; try{E=JSON.parse(localStorage.getItem('sp_e')||'[]'); if(!Array.isArray(E)) E=[];}catch(e){E=[];}
+var view='home';
+var P=[];try{P=JSON.parse(localStorage.getItem('sp_p')||'[]');if(!Array.isArray(P))P=[];}catch(e){P=[];}
+var S=[];try{S=JSON.parse(localStorage.getItem('sp_s')||'[]');if(!Array.isArray(S))S=[];}catch(e){S=[];}
+var C=[];try{C=JSON.parse(localStorage.getItem('sp_c')||'[]');if(!Array.isArray(C))C=[];}catch(e){C=[];}
+var E=[];try{E=JSON.parse(localStorage.getItem('sp_e')||'[]');if(!Array.isArray(E))E=[];}catch(e){E=[];}
+var SUP=[];try{SUP=JSON.parse(localStorage.getItem('sp_sup')||'[]');if(!Array.isArray(SUP))SUP=[];}catch(e){SUP=[];}
 var cart=[];
-if(location.search.indexOf('reset=1')>-1){localStorage.clear(); P=[];S=[];C=[];E=[];cart=[];}
-function save(){try{localStorage.setItem('sp_p',JSON.stringify(P));localStorage.setItem('sp_s',JSON.stringify(S));localStorage.setItem('sp_c',JSON.stringify(C));localStorage.setItem('sp_e',JSON.stringify(E));}catch(e){}}
-function toggleMenu(){document.getElementById('side').classList.toggle('open');document.getElementById('ov').classList.toggle('show');}
-function go(v){view=v;toggleMenu();render();}
+if(location.search.indexOf('reset=1')>-1){localStorage.clear();P=[];S=[];C=[];E=[];SUP=[];cart=[];}
+function save(){try{localStorage.setItem('sp_p',JSON.stringify(P));localStorage.setItem('sp_s',JSON.stringify(S));localStorage.setItem('sp_c',JSON.stringify(C));localStorage.setItem('sp_e',JSON.stringify(E));localStorage.setItem('sp_sup',JSON.stringify(SUP));}catch(e){}}
+function go(v){view=v;render();window.scrollTo(0,0);}
 function total(){var t=0;for(var i=0;i<S.length;i++)t+=Number(S[i].pr||0);return t;}
 function totalExp(){var t=0;for(var i=0;i<E.length;i++)t+=Number(E[i].amt||0);return t;}
-function addP(){var n=document.getElementById('pn').value;var pr=document.getElementById('pp').value;var q=document.getElementById('pq').value;if(!n){alert('Enter name');return;}P.push({n:n,pr:Number(pr||0),q:Number(q||0)});save();render();}
-function delP(i){P.splice(i,1);save();render();}
+function back(){return '<button class="back" onclick="go(\'home\')">← Back to Menu</button>';}
+function addP(){var n=document.getElementById('pn').value.trim();var pr=document.getElementById('pp').value;var q=document.getElementById('pq').value;var ct=document.getElementById('pc').value;if(!n){alert('Enter product name');return;}P.push({n:n,pr:Number(pr||0),cost:Number(ct||0),q:Number(q||0)});save();render();alert('Saved: '+n);}
+function delP(i){if(!confirm('Delete this product?'))return;P.splice(i,1);save();render();}
 function addCart(i){if(P[i].q<=0){alert('Out of stock');return;}var f=null;for(var k=0;k<cart.length;k++){if(cart[k].idx==i)f=cart[k];}if(f)f.qty++;else cart.push({idx:i,n:P[i].n,pr:P[i].pr,qty:1});render();}
 function cartT(){var t=0;for(var i=0;i<cart.length;i++)t+=cart[i].pr*cart[i].qty;return t;}
-function checkout(){if(!cart.length){alert('Cart empty');return;}for(var i=0;i<cart.length;i++){P[cart[i].idx].q-=cart[i].qty;S.push({n:cart[i].n,pr:cart[i].pr,d:new Date().toLocaleString()});}var t=cartT();cart=[];save();render();alert('Sale saved! Total $'+t);}
-function addC(){var n=document.getElementById('cuN').value;if(!n)return;C.push({n:n,p:document.getElementById('cuP').value||''});save();render();}
-function addE(){var n=document.getElementById('exN').value;var a=document.getElementById('exA').value;if(!n)return;E.push({n:n,amt:Number(a||0),d:new Date().toLocaleString()});save();render();}
+function checkout(){if(!cart.length){alert('Cart empty');return;}for(var i=0;i<cart.length;i++){P[cart[i].idx].q-=cart[i].qty;S.push({n:cart[i].n,pr:cart[i].pr,qty:cart[i].qty,d:new Date().toLocaleString()});}var t=cartT();cart=[];save();render();alert('Sale saved! Total $'+t);}
+function addC(){var n=document.getElementById('cuN').value.trim();if(!n)return;C.push({n:n,p:document.getElementById('cuP').value||''});save();render();}
+function addSUP(){var n=document.getElementById('suN').value.trim();if(!n)return;SUP.push({n:n,p:document.getElementById('suP').value||''});save();render();}
+function addE(){var n=document.getElementById('exN').value.trim();var a=document.getElementById('exA').value;if(!n)return;E.push({n:n,amt:Number(a||0),d:new Date().toLocaleString()});save();render();}
 function render(){
-var items=[['dashboard','📊 1. Dashboard'],['pos','🛒 2. POS / New Sale'],['products','📦 3. Products PRD'],['purchasing','🛍️ 4. Purchasing PO'],['grn','📥 5. GRN - Receive'],['sales','🧾 6. Sales / Receipts'],['stocktake','📋 Stock Take'],['customers','👥 7. Customers'],['suppliers','🏭 8. Suppliers'],['expenses','💸 9. Expenses & Cash'],['reports','📈 10. Reports Profit'],['users','👤 11. Users'],['branches','🏢 12. Branches'],['audit','📜 13. Audit Log'],['settings','⚙️ 14. Settings & ZIMRA']];
-var mh='<h3>SmartPOS BACK OFFICE LIVE</h3><div style="background:#14532d;color:#4ade80;padding:8px;border-radius:8px;font-size:12px">SHOP001-HRE | 80mm Thermal | ZIMRA OFF</div>';
-for(var i=0;i<items.length;i++){mh+='<button class="'+(view==items[i][0]?'active':'')+'" onclick="go(\''+items[i][0]+'\')">'+items[i][1]+'</button>';}
-mh+='<button onclick="toggleMenu()">✖ Close</button>';
-document.getElementById('side').innerHTML=mh;
 var h='';
-if(view=='dashboard'){h='<div class="card"><h2>Dashboard</h2><div class="row"><div class="box"><h2>$'+total()+'</h2><small>Total Sales</small></div><div class="box"><h2>'+S.length+'</h2><small>Sales</small></div><div class="box"><h2>'+P.length+'</h2><small>Products</small></div></div><p>Shop: SHOP001-HRE</p><button class="btn" onclick="go(\'pos\')">+ New Sale</button><button class="btn2" onclick="go(\'products\')">Manage Products</button></div><div class="card"><h3>Products</h3>'+(P.length==0?'No products yet. Tap Menu > Add Product':P.map(function(p,i){return '<p>'+p.n+' - $'+p.pr+' - Stock: '+p.q+' <button class="btn2" onclick="addCart('+i+')">Sell</button></p>';}).join(''))+'</div>';}
-else if(view=='pos'){h='<div class="card"><h2>POS / New Sale</h2>'+(P.length==0?'No products yet':P.map(function(p,i){return '<p>'+p.n+' - $'+p.pr+' - Stock: '+p.q+' <button class="btn2" onclick="addCart('+i+')">Add</button></p>';}).join(''))+'</div><div class="card"><h3>Cart - Total $'+cartT()+'</h3>'+(cart.length==0?'Cart empty':cart.map(function(c){return '<p>'+c.n+' x'+c.qty+' = $'+(c.pr*c.qty)+'</p>';}).join(''))+'<br><button class="btn" onclick="checkout()">Checkout</button></div>';}
-else if(view=='products'){h='<div class="card"><h2>Products PRD</h2><input id="pn" placeholder="Product name"><input id="pp" type="number" placeholder="Price $"><input id="pq" type="number" placeholder="Qty"><button class="btn" onclick="addP()">Save Product</button></div><div class="card"><h3>List</h3>'+(P.length==0?'No products':P.map(function(p,i){return '<p>'+p.n+' - $'+p.pr+' - Stock '+p.q+' <button class="btn2" onclick="delP('+i+')">Delete</button></p>';}).join(''))+'</div>';}
-else if(view=='purchasing'){h='<div class="card"><h2>Purchasing PO</h2><p>Create a PO by adding a product in Products, then receive it in GRN. This screen is ready.</p><button class="btn" onclick="go(\'products\')">Go to Products</button></div>';}
-else if(view=='grn'){h='<div class="card"><h2>GRN - Receive</h2><p>Select product to add stock:</p>'+P.map(function(p,i){return '<p>'+p.n+' - Stock '+p.q+' <button class="btn2" onclick="P['+i+'].q+=10;save();render();">+10 Receive</button></p>';}).join('')+'</div>';}
-else if(view=='sales'){h='<div class="card"><h2>Sales / Receipts</h2>'+(S.length==0?'No sales yet':S.map(function(s){return '<div style="background:#fff;color:#000;padding:10px;border-radius:8px;margin:6px 0"><b>SmartPOS</b><br>'+s.n+' - $'+s.pr+'<br>'+s.d+'<br>Thank you!</div>';}).join(''))+'</div>';}
-else if(view=='stocktake'){h='<div class="card"><h2>Stock Take</h2>'+(P.length==0?'No products':P.map(function(p){return '<p>'+p.n+' - System Stock: '+p.q+' - '+(p.q<5?'LOW':'OK')+'</p>';}).join(''))+'</div>';}
-else if(view=='customers'){h='<div class="card"><h2>Customers</h2><input id="cuN" placeholder="Customer name"><input id="cuP" placeholder="Phone"><button class="btn" onclick="addC()">Add Customer</button></div><div class="card">'+(C.length==0?'No customers':C.map(function(c){return '<p>'+c.n+' - '+c.p+'</p>';}).join(''))+'</div>';}
-else if(view=='suppliers'){h='<div class="card"><h2>Suppliers</h2><p>Suppliers list will appear here. Add suppliers via Customers pattern — screen is working.</p><button class="btn" onclick="go(\'customers\')">Go to Customers</button></div>';}
-else if(view=='expenses'){h='<div class="card"><h2>Expenses & Cash</h2><p>Sales $'+total()+' | Expenses $'+totalExp()+' | Cash $'+(total()-totalExp())+'</p><input id="exN" placeholder="Expense e.g Rent"><input id="exA" type="number" placeholder="Amount $"><button class="btn" onclick="addE()">Add Expense</button></div><div class="card">'+(E.length==0?'No expenses':E.map(function(e){return '<p>'+e.n+' - $'+e.amt+' - '+e.d+'</p>';}).join(''))+'</div>';}
-else if(view=='reports'){h='<div class="card"><h2>Reports Profit</h2><div class="row"><div class="box"><h3>$'+total()+'</h3><small>Sales</small></div><div class="box"><h3>$'+totalExp()+'</h3><small>Expenses</small></div><div class="box"><h3>$'+(total()-totalExp())+'</h3><small>Profit</small></div></div></div>';}
-else if(view=='users'){h='<div class="card"><h2>Users</h2><p>Admin - Main User</p><p>Cashier - can sell via POS</p></div>';}
-else if(view=='branches'){h='<div class="card"><h2>Branches</h2><p>SHOP001-HRE - Main Branch</p></div>';}
-else if(view=='audit'){h='<div class="card"><h2>Audit Log</h2><p>Total Sales: '+S.length+'</p><p>Total Products: '+P.length+'</p><p>Last sale: '+(S.length?S[0].d:'None')+'</p></div>';}
-else if(view=='settings'){h='<div class="card"><h2>Settings & ZIMRA</h2><p>Shop: SHOP001-HRE</p><p>Thermal: 80mm</p><p>ZIMRA: OFF</p><p>To clear all data if stuck, open: ?reset=1</p></div>';}
+if(view=='home'){
+h='<div class="card"><h2>Welcome, SHOP001-HRE</h2><p style="color:#cbd5e1">Choose what you want to do:</p></div>';
+var m=[['dashboard','📊','1. Dashboard','Sales, Products & Profit'],['pos','🛒','2. POS / New Sale','Sell to customer'],['products','📦','3. Products PRD','Add, view, delete products'],['purchasing','🛍️','4. Purchasing PO','Order stock'],['grn','📥','5. GRN - Receive','Receive stock into shop'],['sales','🧾','6. Sales / Receipts','All sales & receipts'],['stocktake','📋','Stock Take','Check your stock'],['customers','👥','7. Customers','Customer list'],['suppliers','🏭','8. Suppliers','Supplier list'],['expenses','💸','9. Expenses & Cash','Expenses & cash in hand'],['reports','📈','10. Reports Profit','Profit report'],['users','👤','11. Users','Staff'],['branches','🏢','12. Branches','Your shops'],['audit','📜','13. Audit Log','History'],['settings','⚙️','14. Settings & ZIMRA','Shop settings']];
+for(var i=0;i<m.length;i++){h+='<button class="menuBtn2" onclick="go(\''+m[i][0]+'\')"><span>'+m[i][1]+'</span><div>'+m[i][2]+'<small>'+m[i][3]+'</small></div></button>';}
+}
+else if(view=='dashboard'){h=back()+'<div class="card"><h2>📊 Dashboard</h2><div class="row"><div class="box"><h2>$'+total()+'</h2><small>Total Sales</small></div><div class="box"><h2>'+S.length+'</h2><small>Sales</small></div><div class="box"><h2>'+P.length+'</h2><small>Products</small></div></div></div><div class="card"><h3>Quick Actions</h3><button class="btn" onclick="go(\'pos\')">🛒 + New Sale</button><button class="btn2" onclick="go(\'products\')">📦 Manage Products</button> <button class="btn2" onclick="go(\'reports\')">📈 Reports</button></div><div class="card"><h3>Low Stock</h3>'+(P.filter(function(p){return p.q<5}).length==0?'<p>✅ All stock OK</p>':P.filter(function(p){return p.q<5}).map(function(p){return '<div class="item"><b>'+p.n+'</b><small>Only '+p.q+' left</small></div>';}).join(''))+'</div>';}
+else if(view=='pos'){h=back()+'<div class="card"><h2>🛒 POS / New Sale</h2><p style="color:#cbd5e1">Tap Add to put in cart.</p>'+(P.length==0?'<p>No products yet. Go to Products to add.</p>':P.map(function(p,i){return '<div class="item"><div><b>'+p.n+'</b><br><small>$'+p.pr+' • Stock: '+p.q+'</small></div><button class="btn2" onclick="addCart('+i+')">Add +</button></div>';}).join(''))+'</div><div class="card"><h3>🧺 Cart</h3>'+(cart.length==0?'<p>Cart empty</p>':cart.map(function(c){return '<div class="item"><b>'+c.n+' x'+c.qty+'</b><b>$'+(c.pr*c.qty)+'</b></div>';}).join(''))+'<h3>Total: $'+cartT()+'</h3><button class="btn" onclick="checkout()">✅ Checkout / Print Receipt</button></div>';}
+else if(view=='products'){h=back()+'<div class="card"><h2>📦 Products PRD</h2><label>Product Name</label><input id="pn" placeholder="e.g Coca-Cola 500ml"><label>Selling Price $</label><input id="pp" type="number" placeholder="1.50"><label>Cost Price $</label><input id="pc" type="number" placeholder="1.00"><label>Quantity</label><input id="pq" type="number" placeholder="20"><button class="btn" onclick="addP()">💾 Save Product</button></div><div class="card"><h3>📋 Product List ('+P.length+')</h3>'+(P.length==0?'<p>No products yet.</p>':P.map(function(p,i){return '<div class="item"><div><b>'+p.n+'</b><br><small>$'+p.pr+' • Cost $'+(p.cost||0)+' • Stock: '+p.q+'</small></div><button class="del" onclick="delP('+i+')">Delete</button></div>';}).join(''))+'</div>';}
+else if(view=='purchasing'){h=back()+'<div class="card"><h2>🛍️ Purchasing PO</h2><p style="color:#cbd5e1">Order stock from supplier.</p><label>What to order?</label><input id="poN" placeholder="e.g Sugar 2kg"><label>Qty</label><input id="poQ" type="number" placeholder="10"><button class="btn" onclick="alert(\'PO created for \'+document.getElementById(\'poN\').value)">📝 Create PO</button></div><div class="card"><h3>Tip</h3><p>After supplier delivers, go to GRN to add it to stock.</p><button class="btn2" onclick="go(\'grn\')">Go to GRN →</button></div>';}
+else if(view=='grn'){h=back()+'<div class="card"><h2>📥 GRN - Receive Stock</h2><p style="color:#cbd5e1">Tap +10 to receive 10 pieces.</p>'+(P.length==0?'<p>No products yet.</p>':P.map(function(p,i){return '<div class="item"><div><b>'+p.n+'</b><br><small>Current Stock: '+p.q+'</small></div><button class="btn2" onclick="P['+i+'].q+=10;save();render();">+10 Receive</button></div>';}).join(''))+'</div>';}
+else if(view=='sales'){h=back()+'<div class="card"><h2>🧾 Sales / Receipts</h2><p>Total Sales: <b>$'+total()+'</b> • Count: '+S.length+'</p></div>'+(S.length==0?'<div class="card"><p>No sales yet.</p></div>':S.map(function(s){return '<div class="receipt"><b>SmartPOS - SHOP001-HRE</b><br>'+s.d+'<br>------------------------<br>'+s.n+' x'+(s.qty||1)+' = $'+s.pr+'<br><b>Total: $'+s.pr+'</b><br>Thank you!</div>';}).join(''));}
+else if(view=='stocktake'){h=back()+'<div class="card"><h2>📋 Stock Take</h2><p style="color:#cbd5e1">Count physical stock and compare.</p>'+(P.length==0?'<p>No products</p>':P.map(function(p){return '<div class="item"><div><b>'+p.n+'</b><br><small>System: '+p.q+'</small></div><b>'+(p.q<5?'⚠️ LOW':'✅ OK')+'</b></div>';}).join(''))+'</div>';}
+else if(view=='customers'){h=back()+'<div class="card"><h2>👥 Customers</h2><input id="cuN" placeholder="Customer name"><input id="cuP" placeholder="Phone"><button class="btn" onclick="addC()">➕ Add Customer</button></div><div class="card"><h3>List ('+C.length+')</h3>'+(C.length==0?'<p>No customers yet.</p>':C.map(function(c){return '<div class="item"><b>'+c.n+'</b><small>'+c.p+'</small></div>';}).join(''))+'</div>';}
+else if(view=='suppliers'){h=back()+'<div class="card"><h2>🏭 Suppliers</h2><input id="suN" placeholder="Supplier name"><input id="suP" placeholder="Phone"><button class="btn" onclick="addSUP()">➕ Add Supplier</button></div><div class="card"><h3>List ('+SUP.length+')</h3>'+(SUP.length==0?'<p>No suppliers yet.</p>':SUP.map(function(s){return '<div class="item"><b>'+s.n+'</b><small>'+s.p+'</small></div>';}).join(''))+'</div>';}
+else if(view=='expenses'){h=back()+'<div class="card"><h2>💸 Expenses & Cash</h2><div class="row"><div class="box"><h2>$'+total()+'</h2><small>Sales</small></div><div class="box"><h2>$'+totalExp()+'</h2><small>Expenses</small></div><div class="box"><h2>$'+(total()-totalExp())+'</h2><small>Cash in Hand</small></div></div></div><div class="card"><h3>Add Expense</h3><input id="exN" placeholder="e.g Rent"><input id="exA" type="number" placeholder="Amount $"><button class="btn" onclick="addE()">➕ Add Expense</button></div><div class="card"><h3>Expense List</h3>'+(E.length==0?'<p>No expenses</p>':E.map(function(e){return '<div class="item"><b>'+e.n+'</b><b>$'+e.amt+'</b></div>';}).join(''))+'</div>';}
+else if(view=='reports'){h=back()+'<div class="card"><h2>📈 Reports Profit</h2><div class="row"><div class="box"><h2>$'+total()+'</h2><small>Sales</small></div><div class="box"><h2>$'+totalExp()+'</h2><small>Expenses</small></div><div class="box"><h2>$'+(total()-totalExp())+'</h2><small>Net Profit</small></div></div></div><div class="card"><p>Sales count: '+S.length+'</p><p>Products: '+P.length+'</p><p>Customers: '+C.length+'</p></div>';}
+else if(view=='users'){h=back()+'<div class="card"><h2>👤 Users</h2><div class="item"><b>Admin</b><small>Owner - Full Access</small></div><div class="item"><b>Cashier</b><small>Can sell via POS</small></div></div>';}
+else if(view=='branches'){h=back()+'<div class="card"><h2>🏢 Branches</h2><div class="item"><b>SHOP001-HRE</b><small>Main Branch - Harare</small></div></div>';}
+else if(view=='audit'){h=back()+'<div class="card"><h2>📜 Audit Log</h2><p>Total Sales: '+S.length+'</p><p>Total Products: '+P.length+'</p><p>Last Sale: '+(S.length?S[S.length-1].d:'None')+'</p></div>';}
+else if(view=='settings'){h=back()+'<div class="card"><h2>⚙️ Settings & ZIMRA</h2><p><b>Shop:</b> SHOP001-HRE</p><p><b>Thermal:</b> 80mm</p><p><b>ZIMRA:</b> OFF</p><p style="color:#cbd5e1">ZIMRA OFF = normal receipt. ON = fiscal mode later.</p><button class="btn2" onclick="if(confirm(\'Clear all data?\')){localStorage.clear();location.reload();}">🗑️ Clear All Data</button></div>';}
 document.getElementById('app').innerHTML=h;
 }
 render();
-}catch(err){
-document.getElementById('app').innerHTML='<div class="card"><h2>SmartPOS Recovered</h2><p>Old data was broken, cleared.</p><button onclick="localStorage.clear();location.reload()">Clear & Reload</button></div>';
-}
 </script></body></html>
