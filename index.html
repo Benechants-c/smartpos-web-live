@@ -1,63 +1,1281 @@
+HTML
+
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101c35"><title>PROMAX SmartPOS</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101c35">
+<title>PROMAX SmartPOS</title>
 <style>
-:root{--navy:#101c35;--navy2:#203653;--green:#16a34a;--blue:#2563eb;--bg:#f1f5f9;--line:#e2e8f0;--muted:#64748b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#172033;font:14px Arial,system-ui}button,input,select{font:inherit}button{cursor:pointer}header{height:62px;background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 15px;position:sticky;top:0;z-index:10}.brand{font-size:19px;font-weight:900}.brand span{color:#4ade80}.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.layout{display:flex;min-height:calc(100vh - 62px)}aside{width:235px;background:var(--navy);padding:12px 10px;flex-shrink:0}main{padding:17px;width:100%;max-width:1500px;margin:auto;min-width:0}.navtitle{font-size:10px;color:#8295b5;font-weight:bold;letter-spacing:1px;padding:13px 10px 5px}.nav{display:block;width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:11px;border-radius:8px;margin:2px 0;font-weight:bold}.nav:hover,.nav.active{background:#263957;color:white}.btn{border:0;border-radius:8px;padding:10px 13px;background:var(--green);color:white;font-weight:bold}.btn.blue{background:var(--blue)}.btn.light{background:#eaf0f7;color:#24334d}.btn.red{background:#fee2e2;color:#991b1b}.btn.small{padding:7px 9px;font-size:12px}.card{background:white;border:1px solid #e8edf4;border-radius:12px;padding:15px;margin-bottom:13px;min-width:0}.pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin:2px 0 16px}h1{font-size:23px;margin:0 0 4px}h2{font-size:16px;margin:0 0 12px}.sub,.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.kpi{font-size:12px;color:var(--muted);font-weight:bold}.kpi strong{display:block;color:#172033;font-size:22px;margin-top:7px}.field{margin-bottom:10px}.field label{display:block;font-size:12px;font-weight:bold;color:#475569;margin-bottom:5px}input,select{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:10px;background:white;color:#172033;min-width:0}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:600px}th{text-align:left;background:#f8fafc;color:#64748b;font-size:11px;padding:10px}td{padding:10px;border-top:1px solid var(--line);vertical-align:middle}.empty{text-align:center;padding:22px;color:#94a3b8}.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#dcfce7;color:#166534;font-size:10px;font-weight:bold}.pill.low{background:#fef3c7;color:#92400e}.pill.bad{background:#fee2e2;color:#991b1b}.hidden{display:none!important}.login{max-width:420px;margin:7vh auto}.posgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}.productgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:55vh;overflow:auto}.tile{border:1px solid var(--line);border-radius:9px;padding:12px;background:white;text-align:left}.tile b{display:block}.cartline{display:grid;grid-template-columns:1fr 65px 80px 28px;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.total{display:flex;justify-content:space-between;padding:7px 0}.total.big{font-size:20px;font-weight:bold;border-top:1px solid var(--line);margin-top:8px}.mobilemenu{display:none}#toast{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#172033;color:white;padding:11px 16px;border-radius:9px;z-index:100;display:none;max-width:90%}.search{max-width:300px}@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.posgrid{grid-template-columns:1fr}}@media(max-width:620px){.mobilemenu{display:inline-block}aside{display:none;position:fixed;z-index:20;top:62px;bottom:0;left:0;width:260px;overflow:auto}aside.open{display:block}.layout{display:block}main{padding:12px}.grid2,.formgrid{grid-template-columns:1fr}.grid{gap:7px}.card{padding:12px}}@media print{body *{visibility:hidden!important}#printArea,#printArea *{visibility:visible!important}#printArea{position:absolute;inset:0;background:white;padding:15px}}
-</style></head><body>
-<header><div class="toolbar"><button class="btn light mobilemenu" onclick="toggleNav()">☰</button><div class="brand">PROMAX <span>SmartPOS</span></div></div><div class="toolbar"><span id="status">● OFFLINE</span><span id="who"></span><button class="btn light small" onclick="logout()">Sign out</button></div></header>
-<div id="loginView" class="card login"><h1>PROMAX SmartPOS</h1><p class="sub">Secure cloud back office</p><div class="field"><label>Email address</label><input id="email" type="email" autocomplete="username"></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password"></div><button class="btn" style="width:100%" onclick="login()">Sign In</button><p class="muted">Staff need a Firebase Authentication account and a matching profile under users/{uid}.</p></div>
-<div id="appView" class="layout hidden"><aside id="sidebar"><div class="navtitle">WORKSPACE</div><button class="nav active" data-page="dashboard" onclick="go('dashboard')">▦ Dashboard</button><button class="nav" data-page="pos" onclick="go('pos')">🛒 POS / New Sale</button><div class="navtitle">INVENTORY & SALES</div><button class="nav" data-page="products" onclick="go('products')">📦 Products</button><button class="nav" data-page="purchasing" onclick="go('purchasing')">🛍 Purchase Orders</button><button class="nav" data-page="grn" onclick="go('grn')">📥 Goods Received</button><button class="nav" data-page="stock" onclick="go('stock')">📋 Stock Control</button><button class="nav" data-page="sales" onclick="go('sales')">🧾 Sales & Receipts</button><div class="navtitle">PEOPLE & FINANCE</div><button class="nav" data-page="customers" onclick="go('customers')">👥 Customers</button><button class="nav" data-page="suppliers" onclick="go('suppliers')">🏭 Suppliers</button><button class="nav" data-page="expenses" onclick="go('expenses')">💸 Expenses & Cash</button><button class="nav" data-page="reports" onclick="go('reports')">📈 Reports</button><div class="navtitle">ADMINISTRATION</div><button class="nav" data-page="users" onclick="go('users')">👤 Users & Roles</button><button class="nav" data-page="branches" onclick="go('branches')">🏢 Branches</button><button class="nav" data-page="audit" onclick="go('audit')">📜 Audit Log</button><button class="nav" data-page="settings" onclick="go('settings')">⚙ Settings & Backup</button></aside><main id="main"></main></div><div id="toast"></div><div id="printArea" class="hidden"></div>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+:root{--navy:#101c35;--navy2:#203653;--green:#16a34a;--blue:#2563eb;--bg:#f1f5f9;--line:#e2e8f0;--muted:#64748b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#172033;font:14px Arial,system-ui}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{height:62px;background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 15px;position:sticky;top:0;z-index:10}
+.brand{font-size:19px;font-weight:900}.brand span{color:#4ade80}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.layout{display:flex;min-height:calc(100vh - 62px)}
+aside{width:235px;background:var(--navy);padding:12px 10px;flex-shrink:0}
+main{padding:17px;width:100%;max-width:1500px;margin:auto;min-width:0}
+.navtitle{font-size:10px;color:#8295b5;font-weight:bold;letter-spacing:1px;padding:13px 10px 5px}
+.nav{display:block;width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:11px;border-radius:8px;margin:2px 0;font-weight:bold}
+.nav:hover,.nav.active{background:#263957;color:white}
+.btn{border:0;border-radius:8px;padding:10px 13px;background:var(--green);color:white;font-weight:bold}
+.btn.blue{background:var(--blue)}
+.btn.light{background:#eaf0f7;color:#24334d}
+.btn.red{background:#fee2e2;color:#991b1b}
+.btn.small{padding:7px 9px;font-size:12px}
+.card{background:white;border:1px solid #e8edf4;border-radius:12px;padding:15px;margin-bottom:13px;min-width:0}
+.pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin:2px 0 16px}
+h1{font-size:23px;margin:0 0 4px}
+h2{font-size:16px;margin:0 0 12px}
+.sub,.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.kpi{font-size:12px;color:var(--muted);font-weight:bold}
+.kpi strong{display:block;color:#172033;font-size:22px;margin-top:7px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:12px;font-weight:bold;color:#475569;margin-bottom:5px}
+input,select{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:10px;background:white;color:#172033;min-width:0}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.tablewrap{overflow:auto}
+table{border-collapse:collapse;width:100%;min-width:600px}
+th{text-align:left;background:#f8fafc;color:#64748b;font-size:11px;padding:10px}
+td{padding:10px;border-top:1px solid var(--line);vertical-align:middle}
+.empty{text-align:center;padding:22px;color:#94a3b8}
+.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#dcfce7;color:#166534;font-size:10px;font-weight:bold}
+.pill.low{background:#fef3c7;color:#92400e}
+.pill.bad{background:#fee2e2;color:#991b1b}
+.hidden{display:none!important}
+.login{max-width:420px;margin:7vh auto}
+.posgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}
+.productgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:55vh;overflow:auto}
+.tile{border:1px solid var(--line);border-radius:9px;padding:12px;background:white;text-align:left}
+.tile b{display:block}
+.cartline{display:grid;grid-template-columns:1fr 65px 80px 28px;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.total{display:flex;justify-content:space-between;padding:7px 0}
+.total.big{font-size:20px;font-weight:bold;border-top:1px solid var(--line);margin-top:8px}
+.mobilemenu{display:none}
+#toast{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#172033;color:white;padding:11px 16px;border-radius:9px;z-index:100;display:none;max-width:90%}
+.search{max-width:300px}
+
+/* SETTINGS NAVIGATION */
+.settings-layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:14px}
+.settings-nav{background:white;border:1px solid var(--line);border-radius:12px;padding:9px;height:max-content}
+.settings-nav button{display:block;width:100%;text-align:left;border:0;background:white;padding:13px;border-radius:8px;margin-bottom:5px;color:#334155;font-weight:bold}
+.settings-nav button:hover,.settings-nav button.active{background:#eaf0f7;color:#1d4ed8}
+.settings-content{min-width:0}
+.settings-section{background:white;border:1px solid var(--line);border-radius:12px;padding:16px}
+.settings-description{color:var(--muted);margin:0 0 15px}
+.settings-save{margin-top:8px}
+.settings-nav button span{display:inline-block;width:27px}
+.settings-mobile-title{display:none}
+
+/* GRN */
+.grn-product-panel{background:#f8fafc;border:1px solid var(--line);padding:13px;border-radius:10px;margin:12px 0}
+.grn-line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.grn-line-info{min-width:0}
+.grn-line-info small{display:block;color:var(--muted);margin-top:4px}
+.grn-summary{background:#f8fafc;padding:12px;border-radius:9px;margin:12px 0}
+@media(max-width:850px){
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .posgrid{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+ .mobilemenu{display:inline-block}
+ aside{display:none;position:fixed;z-index:20;top:62px;bottom:0;left:0;width:260px;overflow:auto}
+ aside.open{display:block}
+ .layout{display:block}
+ main{padding:12px}
+ .grid2,.formgrid{grid-template-columns:1fr}
+ .grid{gap:7px}
+ .card{padding:12px}
+ .settings-layout{grid-template-columns:1fr}
+ .settings-nav{display:flex;overflow-x:auto;gap:5px}
+ .settings-nav button{width:auto;white-space:nowrap;margin:0;padding:11px}
+ .settings-nav button span{width:auto;margin-right:5px}
+ .settings-mobile-title{display:block}
+}
+@media print{
+ body *{visibility:hidden!important}
+ #printArea,#printArea *{visibility:visible!important}
+ #printArea{position:absolute;inset:0;background:white;padding:15px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="toolbar">
+  <button class="btn light mobilemenu" onclick="toggleNav()">☰</button>
+  <div class="brand">PROMAX <span>SmartPOS</span></div>
+ </div>
+ <div class="toolbar">
+  <span id="status">● OFFLINE</span>
+  <span id="who"></span>
+  <button class="btn light small" onclick="logout()">Sign out</button>
+ </div>
+</header>
+
+<div id="loginView" class="card login">
+ <h1>PROMAX SmartPOS</h1>
+ <p class="sub">Secure cloud back office</p>
+ <div class="field"><label>Email address</label><input id="email" type="email" autocomplete="username"></div>
+ <div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password"></div>
+ <button class="btn" style="width:100%" onclick="login()">Sign In</button>
+ <p class="muted">Staff need a Firebase Authentication account and matching profile under users/{uid}.</p>
+</div>
+
+<div id="appView" class="layout hidden">
+<aside id="sidebar">
+ <div class="navtitle">WORKSPACE</div>
+ <button class="nav active" data-page="dashboard" onclick="go('dashboard')">▦ Dashboard</button>
+ <button class="nav" data-page="pos" onclick="go('pos')">🛒 POS / New Sale</button>
+ <div class="navtitle">INVENTORY & SALES</div>
+ <button class="nav" data-page="products" onclick="go('products')">📦 Products</button>
+ <button class="nav" data-page="purchasing" onclick="go('purchasing')">🛍 Purchase Orders</button>
+ <button class="nav" data-page="grn" onclick="go('grn')">📥 Goods Received</button>
+ <button class="nav" data-page="stock" onclick="go('stock')">📋 Stock Control</button>
+ <button class="nav" data-page="sales" onclick="go('sales')">🧾 Sales & Receipts</button>
+ <div class="navtitle">PEOPLE & FINANCE</div>
+ <button class="nav" data-page="customers" onclick="go('customers')">👥 Customers</button>
+ <button class="nav" data-page="suppliers" onclick="go('suppliers')">🏭 Suppliers</button>
+ <button class="nav" data-page="expenses" onclick="go('expenses')">💸 Expenses & Cash</button>
+ <button class="nav" data-page="reports" onclick="go('reports')">📈 Reports</button>
+ <div class="navtitle">ADMINISTRATION</div>
+ <button class="nav" data-page="users" onclick="go('users')">👤 Users & Roles</button>
+ <button class="nav" data-page="branches" onclick="go('branches')">🏢 Branches</button>
+ <button class="nav" data-page="audit" onclick="go('audit')">📜 Audit Log</button>
+ <button class="nav" data-page="settings" onclick="go('settings')">⚙ Settings & Backup</button>
+</aside>
+<main id="main"></main>
+</div>
+<div id="toast"></div>
+<div id="printArea" class="hidden"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
 <script>
 'use strict';
-const firebaseConfig={apiKey:'AIzaSyATD1DELs0gmtnS_iG8gcA2UvqwtQDF2A4',authDomain:'smartpos-83781.firebaseapp.com',databaseURL:'https://smartpos-83781-default-rtdb.firebaseio.com',projectId:'smartpos-83781'};
-const SUPER_ADMIN_UID='F7lqLpgdVrfh2AEmemktCYNwn0R2';firebase.initializeApp(firebaseConfig);const auth=firebase.auth(),cloud=firebase.database();
-let user=null,profile=null,shopId=null,shopData={},branches={},staffCache=[],auditCache=[],page='dashboard',cart=[];
-const $=id=>document.getElementById(id),val=id=>$(id)?.value??'',num=x=>Number(x)||0,esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),isRoot=()=>user?.uid===SUPER_ADMIN_UID,records=k=>Object.entries(shopData[k]||{}).map(([id,x])=>({id,...x})),path=k=>'shops/'+shopId+'/'+k,key=()=>cloud.ref().push().key;
-function money(x){let c=shopData.settings?.currency||'USD';return(c==='USD'?'$':c+' ')+num(x).toFixed(2)}function toast(s){$('toast').textContent=s;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',3000)}function toggleNav(){$('sidebar').classList.toggle('open')}function guardSilent(p){return isRoot()||profile?.role==='ADMIN'||(profile?.active!==false&&profile?.permissions?.[p]===true)}function guard(p){if(guardSilent(p))return true;toast('Access denied');return false}
-async function login(){try{await auth.signInWithEmailAndPassword(val('email').trim(),val('password'))}catch(e){toast(e.message)}}async function logout(){await auth.signOut()}
-auth.onAuthStateChanged(async u=>{user=u;if(!u){profile=null;$('loginView').classList.remove('hidden');$('appView').classList.add('hidden');$('who').textContent='';$('status').textContent='● SIGNED OUT';return}try{let s=await cloud.ref('users/'+u.uid).once('value');profile=s.val();if(isRoot()&&!profile)profile={name:'Super Administrator',role:'ADMIN',active:true};if(!profile||profile.active===false)throw Error('Staff profile missing or disabled. Ask administrator.');$('loginView').classList.add('hidden');$('appView').classList.remove('hidden');$('who').textContent=profile.name||u.email;await loadBranches()}catch(e){toast(e.message);await auth.signOut()}});
-async function loadBranches(){let s=await cloud.ref('branches').once('value');branches=s.val()||{};if(isRoot()||profile.role==='ADMIN')shopId=profile.defaultShop||Object.keys(branches)[0]||'';else{let a=profile.branches||{};shopId=profile.defaultShop||Object.keys(a).find(k=>a[k])||''}if(!shopId)throw Error('No branch assigned. Create a branch or assign this user to one.');await loadShop();await loadAdminData();$('status').textContent='● CLOUD CONNECTED';render()}
-async function loadShop(){let s=await cloud.ref('shops/'+shopId).once('value');shopData=s.val()||{};['products','sales','customers','suppliers','expenses','orders','grns','adjustments'].forEach(k=>shopData[k]=shopData[k]||{});shopData.settings=shopData.settings||{shopName:branches[shopId]?.name||shopId,currency:'USD',tax:0,lowStock:5}}
-async function loadAdminData(){if(!isRoot()&&profile.role!=='ADMIN')return;let [u,a]=await Promise.all([cloud.ref('users').once('value'),cloud.ref('audit').once('value')]);staffCache=Object.entries(u.val()||{}).map(([uid,x])=>({uid,...x}));auditCache=Object.entries(a.val()||{}).map(([id,x])=>({id,...x})).sort((a,b)=>(b.date||'').localeCompare(a.date||''))}
-async function audit(action,detail=''){await cloud.ref('audit/'+key()).set({date:new Date().toISOString(),uid:user.uid,user:profile?.name||user.email,shop:shopId,action,detail})}
-async function switchShop(id){if(!isRoot()&&profile.role!=='ADMIN'&&!profile.branches?.[id])return toast('Branch not assigned');shopId=id;cart=[];await loadShop();await audit('Branch selected',id);render()}
-function branchPicker(){if(!isRoot()&&profile.role!=='ADMIN')return '';return `<select onchange="switchShop(this.value)" style="max-width:210px">${Object.entries(branches).map(([id,b])=>`<option value="${esc(id)}" ${id===shopId?'selected':''}>${esc(b.name||id)}</option>`).join('')}</select>`}
-function go(p){let perm=permission(p);if(!guard(perm))return;page=p;$('sidebar').classList.remove('open');render()}function permission(p){if(p==='dashboard')return'reports';if(p==='pos')return'pos';if(p==='sales')return'sales';if(['products','purchasing','grn','stock'].includes(p))return'stock';if(['users','branches','audit','settings'].includes(p))return'admin';if(p==='reports')return'reports';if(['customers','suppliers','expenses'].includes(p))return'manage';return'manage'}
-function render(){document.querySelectorAll('.nav').forEach(b=>{let p=b.dataset.page;b.classList.toggle('hidden',!guardSilent(permission(p)));b.classList.toggle('active',p===page)});if(!guardSilent(permission(page)))page='pos';$('main').innerHTML=`<div class="toolbar" style="justify-content:space-between;margin-bottom:12px"><b>${esc(branches[shopId]?.name||shopId)}</b>${branchPicker()}</div>`+(pages[page]||dashboard)()}
-function head(t,d,a=''){return `<div class="pagehead"><div><h1>${t}</h1><p class="sub">${d}</p></div><div class="toolbar">${a}</div></div>`}function kpi(t,x){return `<div class="card kpi">${t}<strong>${x}</strong></div>`}function table(h,rows,empty='No records found'){return `<div class="tablewrap"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows||`<tr><td colspan="${h.length}" class="empty">${empty}</td></tr>`}</tbody></table></div>`}function field(l,id,type='text',v=''){return `<div class="field"><label>${l}</label><input id="${id}" type="${type}" value="${esc(v)}"></div>`}function selectField(l,id,opts){return `<div class="field"><label>${l}</label><select id="${id}">${opts}</select></div>`}function dateNow(){return new Date().toISOString().slice(0,10)}
-function dashboard(){let ps=records('products'),ss=records('sales'),rev=ss.reduce((a,s)=>a+num(s.total),0),stock=ps.reduce((a,p)=>a+num(p.qty),0),low=ps.filter(p=>num(p.qty)<=num(shopData.settings.lowStock||5)).length;return head('Dashboard','Branch performance and activity')+`<div class="grid">${kpi('TOTAL SALES',money(rev))}${kpi('TRANSACTIONS',ss.length)}${kpi('PRODUCTS',ps.length)}${kpi('LOW STOCK ITEMS',low)}</div><div class="grid2"><div class="card"><h2>Stock overview</h2><p>Total units on hand: <b>${stock}</b></p><p>Low stock products: <b>${low}</b></p><button class="btn blue" onclick="go('stock')">Open stock control</button></div><div class="card"><h2>Quick actions</h2><div class="toolbar"><button class="btn" onclick="go('pos')">New sale</button><button class="btn blue" onclick="go('grn')">Receive stock</button><button class="btn light" onclick="go('products')">Add product</button></div><p class="muted">ZIMRA fiscalisation is not connected by this standalone page.</p></div></div><div class="card"><h2>Recent sales</h2>${salesTable(ss.slice(-8).reverse())}</div>`}
-function salesTable(arr){return table(['Receipt','Date','Cashier','Payment','Total'],arr.map(s=>`<tr><td>${esc(s.receipt||s.id)}</td><td>${esc(s.date||'')}</td><td>${esc(s.cashier||'')}</td><td>${esc(s.payment||'')}</td><td>${money(s.total)}</td></tr>`).join(''))}
-function products(){let rows=records('products').map(p=>`<tr><td>${esc(p.code)}</td><td>${esc(p.name)}</td><td>${money(p.cost)}</td><td>${money(p.price)}</td><td>${num(p.qty)}</td><td><button class="btn light small" onclick="editProduct('${p.id}')">Edit</button> <button class="btn red small" onclick="deleteRecord('products','${p.id}')">Delete</button></td></tr>`).join('');return head('Products','Product catalogue and selling prices',`<button class="btn" onclick="productForm()">+ Add product</button>`)+`<div class="card"><input class="search" placeholder="Search products..." oninput="filterTable(this)">${table(['Code','Product','Cost','Selling price','Qty','Actions'],rows)}</div>`}
-function productForm(id=''){let p=shopData.products?.[id]||{};$('main').innerHTML=head(id?'Edit product':'Add product','Product details')+`<div class="card"><div class="formgrid">${field('Product code','pcode','text',p.code||'')}${field('Product name','pname','text',p.name||'')}${field('Cost price','pcost','number',p.cost??'')}${field('Selling price','pprice','number',p.price??'')}${field('Opening quantity','pqty','number',p.qty??0)}</div><button class="btn" onclick="saveProduct('${id}')">Save product</button> <button class="btn light" onclick="go('products')">Cancel</button></div>`}
-async function saveProduct(id){let name=val('pname').trim(),code=val('pcode').trim();if(!name||!code)return toast('Enter product name and code');let data={name,code,cost:num(val('pcost')),price:num(val('pprice')),qty:num(val('pqty')),updatedAt:new Date().toISOString()};let ref=cloud.ref(path('products')+(id?'/'+id:''));if(id){let old=shopData.products[id];data.qty=old.qty;await ref.update(data)}else await ref.set(data);await audit(id?'Product updated':'Product created',name);await loadShop();go('products');toast('Product saved')}
+
+const firebaseConfig={
+ apiKey:'AIzaSyATD1DELs0gmtnS_iG8gcA2UvqwtQDF2A4',
+ authDomain:'smartpos-83781.firebaseapp.com',
+ databaseURL:'https://smartpos-83781-default-rtdb.firebaseio.com',
+ projectId:'smartpos-83781'
+};
+
+const SUPER_ADMIN_UID='F7lqLpgdVrfh2AEmemktCYNwn0R2';
+firebase.initializeApp(firebaseConfig);
+
+const auth=firebase.auth();
+const cloud=firebase.database();
+
+let user=null,profile=null,shopId=null,shopData={},branches={};
+let staffCache=[],auditCache=[],page='dashboard',cart=[];
+let settingsTab='general';
+let grnCart=[];
+
+const $=id=>document.getElementById(id);
+const val=id=>$(id)?.value??'';
+const num=x=>Number(x)||0;
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({
+ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+
+const isRoot=()=>user?.uid===SUPER_ADMIN_UID;
+const records=k=>Object.entries(shopData[k]||{}).map(([id,x])=>({id,...x}));
+const path=k=>'shops/'+shopId+'/'+k;
+const key=()=>cloud.ref().push().key;
+
+function money(x){
+ let c=shopData.settings?.currency||'USD';
+ return(c==='USD'?'$':c+' ')+num(x).toFixed(2);
+}
+function toast(s){
+ $('toast').textContent=s;
+ $('toast').style.display='block';
+ setTimeout(()=>$('toast').style.display='none',3000);
+}
+function toggleNav(){$('sidebar').classList.toggle('open')}
+function dateNow(){return new Date().toISOString().slice(0,10)}
+
+function guardSilent(p){
+ return isRoot()||profile?.role==='ADMIN'||
+ (profile?.active!==false&&profile?.permissions?.[p]===true);
+}
+function guard(p){
+ if(guardSilent(p))return true;
+ toast('Access denied');return false;
+}
+
+async function login(){
+ try{
+  await auth.signInWithEmailAndPassword(val('email').trim(),val('password'));
+ }catch(e){toast(e.message)}
+}
+async function logout(){await auth.signOut()}
+
+auth.onAuthStateChanged(async u=>{
+ user=u;
+ if(!u){
+  profile=null;
+  $('loginView').classList.remove('hidden');
+  $('appView').classList.add('hidden');
+  $('who').textContent='';
+  $('status').textContent='● SIGNED OUT';
+  return;
+ }
+ try{
+  let s=await cloud.ref('users/'+u.uid).once('value');
+  profile=s.val();
+  if(isRoot()&&!profile)profile={name:'Super Administrator',role:'ADMIN',active:true};
+  if(!profile||profile.active===false)
+   throw Error('Staff profile missing or disabled. Ask administrator.');
+  $('loginView').classList.add('hidden');
+  $('appView').classList.remove('hidden');
+  $('who').textContent=profile.name||u.email;
+  await loadBranches();
+ }catch(e){
+  toast(e.message);await auth.signOut();
+ }
+});
+
+async function loadBranches(){
+ let s=await cloud.ref('branches').once('value');
+ branches=s.val()||{};
+ if(isRoot()||profile.role==='ADMIN')
+  shopId=profile.defaultShop||Object.keys(branches)[0]||'';
+ else{
+  let a=profile.branches||{};
+  shopId=profile.defaultShop||Object.keys(a).find(k=>a[k])||'';
+ }
+ if(!shopId)throw Error('No branch assigned. Create a branch or assign this user to one.');
+ await loadShop();
+ await loadAdminData();
+ $('status').textContent='● CLOUD CONNECTED';
+ render();
+}
+
+async function loadShop(){
+ let s=await cloud.ref('shops/'+shopId).once('value');
+ shopData=s.val()||{};
+ ['products','sales','customers','suppliers','expenses','orders','grns','adjustments']
+ .forEach(k=>shopData[k]=shopData[k]||{});
+ shopData.settings=shopData.settings||{
+  shopName:branches[shopId]?.name||shopId,
+  currency:'USD',tax:0,lowStock:5
+ };
+}
+
+async function loadAdminData(){
+ if(!isRoot()&&profile.role!=='ADMIN')return;
+ let [u,a]=await Promise.all([
+  cloud.ref('users').once('value'),
+  cloud.ref('audit').once('value')
+ ]);
+ staffCache=Object.entries(u.val()||{}).map(([uid,x])=>({uid,...x}));
+ auditCache=Object.entries(a.val()||{}).map(([id,x])=>({id,...x}))
+ .sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+}
+
+async function audit(action,detail=''){
+ await cloud.ref('audit/'+key()).set({
+  date:new Date().toISOString(),
+  uid:user.uid,
+  user:profile?.name||user.email,
+  shop:shopId,
+  action,detail
+ });
+}
+
+async function switchShop(id){
+ if(!isRoot()&&profile.role!=='ADMIN'&&!profile.branches?.[id])
+  return toast('Branch not assigned');
+ shopId=id;cart=[];
+ await loadShop();
+ await audit('Branch selected',id);
+ render();
+}
+
+function branchPicker(){
+ if(!isRoot()&&profile.role!=='ADMIN')return '';
+ return `<select onchange="switchShop(this.value)" style="max-width:210px">
+ ${Object.entries(branches).map(([id,b])=>
+ `<option value="${esc(id)}" ${id===shopId?'selected':''}>${esc(b.name||id)}</option>`
+ ).join('')}</select>`;
+}
+
+function permission(p){
+ if(p==='dashboard')return'reports';
+ if(p==='pos')return'pos';
+ if(p==='sales')return'sales';
+ if(['products','purchasing','grn','stock'].includes(p))return'stock';
+ if(['users','branches','audit','settings'].includes(p))return'admin';
+ if(p==='reports')return'reports';
+ if(['customers','suppliers','expenses'].includes(p))return'manage';
+ return'manage';
+}
+
+function go(p){
+ if(!guard(permission(p)))return;
+ page=p;
+ $('sidebar').classList.remove('open');
+ render();
+}
+
+function render(){
+ document.querySelectorAll('.nav').forEach(b=>{
+  let p=b.dataset.page;
+  b.classList.toggle('hidden',!guardSilent(permission(p)));
+  b.classList.toggle('active',p===page);
+ });
+ if(!guardSilent(permission(page)))page='pos';
+ $('main').innerHTML=
+ `<div class="toolbar" style="justify-content:space-between;margin-bottom:12px">
+ <b>${esc(branches[shopId]?.name||shopId)}</b>${branchPicker()}</div>`+
+ (pages[page]||dashboard)();
+}
+
+function head(t,d,a=''){
+ return `<div class="pagehead"><div><h1>${t}</h1><p class="sub">${d}</p></div>
+ <div class="toolbar">${a}</div></div>`;
+}
+function kpi(t,x){return `<div class="card kpi">${t}<strong>${x}</strong></div>`}
+function table(h,rows,empty='No records found'){
+ return `<div class="tablewrap"><table><thead><tr>
+ ${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>
+ ${rows||`<tr><td colspan="${h.length}" class="empty">${empty}</td></tr>`}
+ </tbody></table></div>`;
+}
+function field(l,id,type='text',v=''){
+ return `<div class="field"><label>${l}</label><input id="${id}" type="${type}" value="${esc(v)}"></div>`;
+}
+function selectField(l,id,opts){
+ return `<div class="field"><label>${l}</label><select id="${id}">${opts}</select></div>`;
+}
+
+/* DASHBOARD */
+
+function dashboard(){
+ let ps=records('products'),ss=records('sales');
+ let rev=ss.reduce((a,s)=>a+num(s.total),0);
+ let stock=ps.reduce((a,p)=>a+num(p.qty),0);
+ let low=ps.filter(p=>num(p.qty)<=num(shopData.settings.lowStock||5)).length;
+ return head('Dashboard','Branch performance and activity')+
+ `<div class="grid">
+ ${kpi('TOTAL SALES',money(rev))}
+ ${kpi('TRANSACTIONS',ss.length)}
+ ${kpi('PRODUCTS',ps.length)}
+ ${kpi('LOW STOCK ITEMS',low)}
+ </div>
+ <div class="grid2">
+ <div class="card"><h2>Stock overview</h2>
+ <p>Total units on hand: <b>${stock}</b></p>
+ <p>Low stock products: <b>${low}</b></p>
+ <button class="btn blue" onclick="go('stock')">Open stock control</button></div>
+ <div class="card"><h2>Quick actions</h2>
+ <div class="toolbar">
+ <button class="btn" onclick="go('pos')">New sale</button>
+ <button class="btn blue" onclick="go('grn')">Receive stock</button>
+ <button class="btn light" onclick="go('products')">Add product</button>
+ </div><p class="muted">ZIMRA fiscalisation is not connected.</p></div>
+ </div>
+ <div class="card"><h2>Recent sales</h2>${salesTable(ss.slice(-8).reverse())}</div>`;
+}
+
+function salesTable(arr){
+ return table(['Receipt','Date','Cashier','Payment','Total'],
+ arr.map(s=>`<tr><td>${esc(s.receipt||s.id)}</td>
+ <td>${esc(s.date||'')}</td><td>${esc(s.cashier||'')}</td>
+ <td>${esc(s.payment||'')}</td><td>${money(s.total)}</td></tr>`).join(''));
+}
+
+/* PRODUCTS */
+
+function products(){
+ let rows=records('products').map(p=>`<tr>
+ <td>${esc(p.code)}</td><td>${esc(p.name)}</td>
+ <td>${money(p.cost)}</td><td>${money(p.price)}</td><td>${num(p.qty)}</td>
+ <td><button class="btn light small" onclick="editProduct('${p.id}')">Edit</button>
+ <button class="btn red small" onclick="deleteRecord('products','${p.id}')">Delete</button></td>
+ </tr>`).join('');
+ return head('Products','Product catalogue and selling prices',
+ `<button class="btn" onclick="productForm()">+ Add product</button>`)+
+ `<div class="card"><input class="search" placeholder="Search products..." oninput="filterTable(this)">
+ ${table(['Code','Product','Cost','Selling price','Qty','Actions'],rows)}</div>`;
+}
+
+function productForm(id=''){
+ let p=shopData.products?.[id]||{};
+ $('main').innerHTML=head(id?'Edit product':'Add product','Product details')+
+ `<div class="card"><div class="formgrid">
+ ${field('Product code','pcode','text',p.code||'')}
+ ${field('Product name','pname','text',p.name||'')}
+ ${field('Cost price','pcost','number',p.cost??'')}
+ ${field('Selling price','pprice','number',p.price??'')}
+ ${field('Opening quantity','pqty','number',p.qty??0)}
+ </div><button class="btn" onclick="saveProduct('${id}')">Save product</button>
+ <button class="btn light" onclick="go('products')">Cancel</button></div>`;
+}
+
+async function saveProduct(id){
+ let name=val('pname').trim(),code=val('pcode').trim();
+ let cost=Number(val('pcost')),price=Number(val('pprice')),qty=Number(val('pqty'));
+ if(!name||!code)return toast('Enter product name and code');
+ if(!Number.isFinite(cost)||cost<0||!Number.isFinite(price)||price<0||!Number.isFinite(qty)||qty<0)
+  return toast('Enter valid non-negative prices and quantity');
+ if(records('products').some(p=>String(p.code).toLowerCase()===code.toLowerCase()&&p.id!==id))
+  return toast('Product code already exists');
+ let data={name,code,cost,price,qty,updatedAt:new Date().toISOString()};
+ let ref=cloud.ref(path('products')+(id?'/'+id:''));
+ if(id){
+  data.qty=shopData.products[id].qty;
+  await ref.update(data);
+ }else{
+  await ref.set(data);
+ }
+ await audit(id?'Product updated':'Product created',name);
+ await loadShop();go('products');toast('Product saved');
+}
 function editProduct(id){productForm(id)}
-async function deleteRecord(k,id){if(!confirm('Delete this record?'))return;await cloud.ref(path(k)+'/'+id).remove();await audit('Record deleted',k+'/'+id);await loadShop();render()}
-function pos(){let ps=records('products'),items=ps.filter(p=>num(p.qty)>0).map(p=>`<button class="tile" onclick="addCart('${p.id}')"><b>${esc(p.name)}</b><small>${esc(p.code)} · ${num(p.qty)} in stock</small><strong>${money(p.price)}</strong></button>`).join('');return head('POS / New Sale','Cashier: '+esc(profile.name||user.email))+`<div class="posgrid"><div class="card"><input id="posSearch" placeholder="Search product name or code" oninput="searchTiles()"><div class="productgrid" id="productTiles">${items||'<p class="empty">No products in stock. Add or receive stock first.</p>'}</div></div><div class="card"><h2>Current sale</h2><div id="cartLines">${cartHTML()}</div><div class="total"><span>Subtotal</span><b>${money(cartTotal())}</b></div><div class="total"><span>Tax</span><b>${money(cartTotal()*num(shopData.settings.tax)/100)}</b></div><div class="total big"><span>TOTAL</span><span>${money(cartTotal()*(1+num(shopData.settings.tax)/100))}</span></div><div class="field"><label>Payment method</label><select id="payment"><option>Cash</option><option>Mobile Money</option><option>Card</option><option>Bank Transfer</option><option>Credit</option></select></div><button class="btn" style="width:100%" onclick="checkout()">Complete sale</button><button class="btn light" style="width:100%;margin-top:7px" onclick="clearCart()">Clear cart</button></div></div>`}
-function searchTiles(){let q=val('posSearch').toLowerCase();document.querySelectorAll('#productTiles .tile').forEach(x=>x.classList.toggle('hidden',!x.textContent.toLowerCase().includes(q)))}function addCart(id){let p=shopData.products[id];if(!p)return;let x=cart.find(c=>c.id===id);if(x){if(x.qty>=num(p.qty))return toast('Not enough stock');x.qty++}else cart.push({id,name:p.name,price:num(p.price),qty:1});render()}function cartTotal(){return cart.reduce((a,x)=>a+x.price*x.qty,0)}function cartHTML(){return cart.length?cart.map(x=>`<div class="cartline"><span>${esc(x.name)}<br><small>${money(x.price)}</small></span><input type="number" min="1" value="${x.qty}" onchange="setCartQty('${x.id}',this.value)"><b>${money(x.price*x.qty)}</b><button class="btn red small" onclick="removeCart('${x.id}')">×</button></div>`).join(''):'<p class="empty">Cart is empty</p>'}function setCartQty(id,q){let x=cart.find(c=>c.id===id),p=shopData.products[id];if(!x)return;x.qty=Math.max(1,Math.min(num(q),num(p.qty)));render()}function removeCart(id){cart=cart.filter(x=>x.id!==id);render()}function clearCart(){cart=[];render()}
-async function checkout(){if(!cart.length)return toast('Cart is empty');let lines=cart.map(x=>({...x}));for(let x of lines){let p=shopData.products[x.id];if(!p||num(p.qty)<x.qty)return toast('Stock changed. Refresh and try again.')}let subtotal=cartTotal(),tax=subtotal*num(shopData.settings.tax)/100,total=subtotal+tax,id=key(),receipt='R-'+Date.now();let updates={};lines.forEach(x=>updates[path('products')+'/'+x.id+'/qty']=num(shopData.products[x.id].qty)-x.qty);let sale={receipt,date:new Date().toISOString(),cashier:profile.name||user.email,uid:user.uid,shop:shopId,payment:val('payment')||'Cash',subtotal,tax,total,items:lines};updates[path('sales')+'/'+id]=sale;try{await cloud.ref().update(updates);await audit('Sale completed',receipt+' '+money(total));cart=[];await loadShop();render();printReceipt(sale);toast('Sale completed')}catch(e){toast('Sale failed: '+e.message)}}
-function printReceipt(s){let html=`<h2>${esc(shopData.settings.shopName||'PROMAX SmartPOS')}</h2><p>Receipt: ${esc(s.receipt)}<br>${esc(s.date)}<br>Cashier: ${esc(s.cashier)}</p><hr>${s.items.map(x=>`<p>${esc(x.name)} × ${x.qty} <span style="float:right">${money(x.price*x.qty)}</span></p>`).join('')}<hr><p>Subtotal: ${money(s.subtotal)}</p><p>Tax: ${money(s.tax)}</p><h3>TOTAL: ${money(s.total)}</h3><p>Payment: ${esc(s.payment)}</p><center>Thank you</center>`;$('printArea').innerHTML=html;$('printArea').classList.remove('hidden');window.print();$('printArea').classList.add('hidden')}
-function sales(){let a=records('sales').sort((x,y)=>(y.date||'').localeCompare(x.date||''));return head('Sales & Receipts','Completed transactions',`<button class="btn blue" onclick="exportCSV('sales')">Export CSV</button>`)+`<div class="card">${salesTable(a)}</div>`}
-function purchasing(){let a=records('orders');return head('Purchase Orders','Record orders placed with suppliers',`<button class="btn" onclick="newOrder()">+ New order</button>`)+`<div class="card">${table(['PO number','Supplier','Date','Status','Notes'],a.map(x=>`<tr><td>${esc(x.number)}</td><td>${esc(x.supplier)}</td><td>${esc(x.date)}</td><td>${esc(x.status)}</td><td>${esc(x.notes)}</td></tr>`).join(''))}</div>`}
-function newOrder(){let suppliers=records('suppliers');$('main').innerHTML=head('New purchase order','Create a supplier order')+`<div class="card"><div class="formgrid">${selectField('Supplier','osupplier',suppliers.map(s=>`<option>${esc(s.name)}</option>`).join(''))}${field('Order date','odate','date',dateNow())}${field('Notes','onotes')}</div><button class="btn" onclick="saveOrder()">Save purchase order</button> <button class="btn light" onclick="go('purchasing')">Cancel</button></div>`}
-async function saveOrder(){let id=key(),o={number:'PO-'+Date.now(),supplier:val('osupplier'),date:val('odate'),notes:val('onotes'),status:'OPEN'};await cloud.ref(path('orders')+'/'+id).set(o);await audit('Purchase order created',o.number);await loadShop();go('purchasing')}
-function grn(){let a=records('grns');return head('Goods Received (GRN)','Receive products into the selected branch',`<button class="btn" onclick="newGRN()">+ Receive stock</button>`)+`<div class="card">${table(['GRN number','Supplier','Date','Invoice','Items','Total units'],a.map(x=>`<tr><td>${esc(x.number)}</td><td>${esc(x.supplier)}</td><td>${esc(x.date)}</td><td>${esc(x.invoice)}</td><td>${x.items?.length||0}</td><td>${num(x.totalQty)}</td></tr>`).join(''))}</div>`}
-function newGRN(){let ss=records('suppliers'),ps=records('products');$('main').innerHTML=head('Receive stock','Add received quantities to branch inventory')+`<div class="card"><div class="formgrid">${selectField('Supplier','gsupplier',ss.map(s=>`<option>${esc(s.name)}</option>`).join(''))}${field('Date','gdate','date',dateNow())}${field('Invoice number','ginvoice')}${field('GRN number','gno','text','AUTO-'+Date.now())}</div><h2>Product lines</h2><div class="formgrid">${selectField('Product','gproduct',ps.map(p=>`<option value="${p.id}">${esc(p.name)} (${esc(p.code)})</option>`).join(''))}${field('Quantity received','gqty','number','1')}${field('Cost price','gcost','number')}${field('Selling price','gsell','number')}</div><button class="btn" onclick="addGRNLine()">Add product line</button><div id="grnLines" style="margin-top:12px"></div><button class="btn" onclick="saveGRN()">Save GRN & update stock</button> <button class="btn light" onclick="go('grn')">Cancel</button></div>`;window.grnCart=[]}
-function addGRNLine(){let id=val('gproduct'),p=shopData.products[id],qty=num(val('gqty'));if(!p||qty<=0)return toast('Select a product and enter quantity');let a=window.grnCart||[];a.push({id,name:p.name,qty,cost:num(val('gcost'))||num(p.cost),sell:num(val('gsell'))||num(p.price)});window.grnCart=a;$('grnLines').innerHTML=a.map(x=>`<p>${esc(x.name)} — Qty ${x.qty}, Cost ${money(x.cost)}, Selling ${money(x.sell)}</p>`).join('')}
-async function saveGRN(){let a=window.grnCart||[];if(!a.length)return toast('Add at least one product');let updates={},totalQty=0;a.forEach(x=>{let p=shopData.products[x.id];updates[path('products')+'/'+x.id+'/qty']=num(p.qty)+x.qty;updates[path('products')+'/'+x.id+'/cost']=x.cost;updates[path('products')+'/'+x.id+'/price']=x.sell;totalQty+=x.qty});let id=key(),g={number:val('gno'),supplier:val('gsupplier'),date:val('gdate'),invoice:val('ginvoice'),items:a,totalQty,receivedBy:profile.name||user.email};updates[path('grns')+'/'+id]=g;try{await cloud.ref().update(updates);await audit('Stock received',g.number);await loadShop();go('grn');toast('GRN saved and stock updated')}catch(e){toast(e.message)}}
-function stock(){let a=records('products'),rows=a.map(p=>`<tr><td>${esc(p.code)}</td><td>${esc(p.name)}</td><td>${num(p.qty)}</td><td>${num(p.qty)<=num(shopData.settings.lowStock||5)?'<span class="pill low">LOW</span>':'<span class="pill">OK</span>'}</td><td><button class="btn light small" onclick="adjustStock('${p.id}')">Adjust</button></td></tr>`).join('');return head('Stock Control','Current branch stock levels',`<button class="btn blue" onclick="go('grn')">Receive stock</button>`)+`<div class="card">${table(['Code','Product','Quantity','Status','Action'],rows)}</div>`}
-async function adjustStock(id){let p=shopData.products[id],v=prompt('Enter stock adjustment (+ or -):',0);if(v===null)return;let n=num(p.qty)+Number(v);if(!Number.isFinite(n)||n<0)return toast('Invalid quantity');await cloud.ref(path('products')+'/'+id+'/qty').set(n);await cloud.ref(path('adjustments')+'/'+key()).set({product:p.name,change:Number(v),date:new Date().toISOString(),user:profile.name});await audit('Stock adjusted',p.name+' '+v);await loadShop();render()}
-function customers(){return head('Customers','Customer directory',`<button class="btn" onclick="addContact('customers')">+ Add customer</button>`)+`<div class="card">${contactTable('customers')}</div>`}function suppliers(){return head('Suppliers','Supplier directory',`<button class="btn" onclick="addContact('suppliers')">+ Add supplier</button>`)+`<div class="card">${contactTable('suppliers')}</div>`}function contactTable(k){return table(['Name','Phone','Email','Action'],records(k).map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.email)}</td><td><button class="btn red small" onclick="deleteRecord('${k}','${x.id}')">Delete</button></td></tr>`).join(''))}async function addContact(k){let name=prompt('Name:');if(!name)return;let phone=prompt('Phone number:')||'',email=prompt('Email (optional):')||'';await cloud.ref(path(k)+'/'+key()).set({name,phone,email});await audit(k+' added',name);await loadShop();render()}
-function expenses(){let a=records('expenses'),sum=a.reduce((n,x)=>n+num(x.amount),0);return head('Expenses & Cash','Record branch operating expenses',`<button class="btn" onclick="addExpense()">+ Add expense</button>`)+`<div class="grid">${kpi('TOTAL EXPENSES',money(sum))}${kpi('ENTRIES',a.length)}</div><div class="card">${table(['Date','Category','Description','Amount'],a.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.category)}</td><td>${esc(x.description)}</td><td>${money(x.amount)}</td></tr>`).join(''))}</div>`}async function addExpense(){let category=prompt('Expense category:');if(!category)return;let description=prompt('Description:')||'',amount=num(prompt('Amount:','0'));if(amount<=0)return toast('Enter a valid amount');await cloud.ref(path('expenses')+'/'+key()).set({category,description,amount,date:dateNow(),by:profile.name});await audit('Expense recorded',category+' '+money(amount));await loadShop();render()}
-function reports(){let ss=records('sales'),rev=ss.reduce((a,x)=>a+num(x.total),0),cost=ss.reduce((a,s)=>a+(s.items||[]).reduce((n,i)=>n+num(shopData.products[i.id]?.cost)*num(i.qty),0),0),exp=records('expenses').reduce((a,x)=>a+num(x.amount),0),pay={};ss.forEach(s=>pay[s.payment]=(pay[s.payment]||0)+num(s.total));return head('Reports','Sales, cost estimates and payment summary',`<button class="btn blue" onclick="exportCSV('sales')">Export sales CSV</button>`)+`<div class="grid">${kpi('REVENUE',money(rev))}${kpi('ESTIMATED COST',money(cost))}${kpi('GROSS PROFIT',money(rev-cost))}${kpi('EXPENSES',money(exp))}</div><div class="card"><h2>Payment breakdown</h2>${table(['Payment method','Total'],Object.entries(pay).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${money(v)}</td></tr>`).join(''))}<p><b>Estimated net after recorded expenses: ${money(rev-cost-exp)}</b></p><small class="muted">Profit estimate uses current product cost prices; historical cost changes can affect accuracy.</small></div>`}
-function users(){if(!isRoot()&&profile.role!=='ADMIN')return head('Users & Roles','Administrator access required');return head('Users & Roles','Manage staff profiles and branch access',`<button class="btn" onclick="newUserProfile()">+ Add staff profile</button>`)+`<div class="card"><p class="muted">Create the staff login first in Firebase Authentication. Then add that account UID here. Deactivate profiles to block app access; this does not delete the Authentication account.</p>${table(['Name','Email','Role','Active','Branches','Action'],staffCache.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.email)}</td><td>${esc(x.role)}</td><td>${x.active===false?'<span class="pill bad">No</span>':'<span class="pill">Yes</span>'}</td><td>${esc(Object.keys(x.branches||{}).join(', '))}</td><td><button class="btn light small" onclick="editUser('${x.uid}')">Edit</button> <button class="btn red small" onclick="toggleUser('${x.uid}')">${x.active===false?'Activate':'Deactivate'}</button></td></tr>`).join(''))}</div>`}
-function newUserProfile(uid=''){let u=staffCache.find(x=>x.uid===uid)||{};$('main').innerHTML=head(uid?'Edit staff profile':'Add staff profile','Assign an existing Firebase Authentication UID')+`<div class="card"><div class="formgrid">${field('Firebase Auth UID','uuid','text',u.uid||'')}${field('Full name','uname','text',u.name||'')}${field('Email','uemail','email',u.email||'')}${selectField('Role','urole',['ADMIN','MANAGER','CASHIER','STOCK KEEPER'].map(x=>`<option ${u.role===x?'selected':''}>${x}</option>`).join(''))}${selectField('Default branch','udefault',Object.entries(branches).map(([id,b])=>`<option value="${esc(id)}" ${u.defaultShop===id?'selected':''}>${esc(b.name||id)}</option>`).join(''))}</div><p><b>Branch access</b></p>${Object.entries(branches).map(([id,b])=>`<label style="display:inline-flex;gap:5px;margin:6px"><input type="checkbox" class="ubranch" value="${esc(id)}" ${u.branches?.[id]?'checked':''}>${esc(b.name||id)}</label>`).join('')}<p><b>Permissions for non-admin roles</b></p>${['pos','sales','stock','manage','reports','admin'].map(p=>`<label style="display:inline-flex;gap:5px;margin:6px"><input type="checkbox" class="uperm" value="${p}" ${u.permissions?.[p]?'checked':''}>${p}</label>`).join('')}<br><button class="btn" onclick="saveUser('${uid}')">Save profile</button> <button class="btn light" onclick="go('users')">Cancel</button></div>`}
-function editUser(uid){newUserProfile(uid)}async function saveUser(old=''){let uid=val('uuid').trim();if(!uid)return toast('UID required');let branchesAllowed={};document.querySelectorAll('.ubranch:checked').forEach(x=>branchesAllowed[x.value]=true);let permissions={};document.querySelectorAll('.uperm:checked').forEach(x=>permissions[x.value]=true);let u={name:val('uname'),email:val('uemail'),role:val('urole'),defaultShop:val('udefault'),branches:branchesAllowed,permissions,active:true};if(old&&old!==uid)await cloud.ref('users/'+old).remove();await cloud.ref('users/'+uid).update(u);await audit('Staff profile saved',u.name);await loadAdminData();go('users');toast('Staff profile saved')}
-async function toggleUser(uid){let x=staffCache.find(u=>u.uid===uid);if(!x)return;await cloud.ref('users/'+uid+'/active').set(x.active===false);await audit('Staff status changed',uid);await loadAdminData();render()}
-function branchesPage(){return branchesView()}function branchesView(){return head('Branches / Shops','One administrator can manage all branches',`<button class="btn" onclick="addBranch()">+ Add branch</button>`)+`<div class="card">${table(['Branch ID','Branch name','Location','Status','Action'],Object.entries(branches).map(([id,b])=>`<tr><td>${esc(id)}</td><td>${esc(b.name)}</td><td>${esc(b.location)}</td><td>${b.active===false?'Inactive':'Active'}</td><td><button class="btn light small" onclick="switchShop('${id}')">Open</button></td></tr>`).join(''))}</div>`}async function addBranch(){let id=prompt('Branch ID (example SHOP002):');if(!id)return;id=id.trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'');if(!id||branches[id])return toast('Invalid or existing branch ID');let name=prompt('Branch name:');if(!name)return;let location=prompt('Location:')||'';await cloud.ref('branches/'+id).set({name,location,active:true});await cloud.ref('shops/'+id).set({settings:{shopName:name,currency:'USD',tax:0,lowStock:5}});await audit('Branch created',id+' '+name);await loadBranches();toast('Branch created')}
-function auditPage(){return head('Audit Log','Administrative activity across shops')+`<div class="card">${table(['Date','User','Branch','Action','Details'],auditCache.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.user)}</td><td>${esc(x.shop)}</td><td>${esc(x.action)}</td><td>${esc(x.detail)}</td></tr>`).join(''))}</div>`}
-function settings(){return head('Settings & Backup','Branch settings and data backup')+`<div class="grid2"><div class="card"><h2>Branch settings</h2>${field('Shop name','sname','text',shopData.settings.shopName||'')}${field('Currency (USD / ZWG)','scurrency','text',shopData.settings.currency||'USD')}${field('Tax percentage','stax','number',shopData.settings.tax||0)}${field('Low stock alert quantity','slow','number',shopData.settings.lowStock??5)}<button class="btn" onclick="saveSettings()">Save settings</button></div><div class="card"><h2>Data backup</h2><p>Export this branch's data as a JSON file. Keep backups secure.</p><button class="btn blue" onclick="backup()">Download backup</button><hr><label>Restore JSON backup</label><input type="file" id="restoreFile" accept="application/json"><button class="btn light" style="margin-top:8px" onclick="restoreBackup()">Restore backup</button></div></div><div class="card"><h2>Integration status</h2><p>ZIMRA fiscalisation: <span class="pill low">NOT CONNECTED</span></p><p>Firebase cloud database: <span class="pill">CONNECTED WHEN SIGNED IN</span></p></div>`}
-async function saveSettings(){let s={shopName:val('sname'),currency:val('scurrency').toUpperCase(),tax:num(val('stax')),lowStock:num(val('slow'))};await cloud.ref(path('settings')).update(s);await audit('Settings updated',s.shopName);await loadShop();render();toast('Settings saved')}
-function backup(){let blob=new Blob([JSON.stringify({branch:shopId,data:shopData},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SmartPOS-'+shopId+'-backup.json';a.click();URL.revokeObjectURL(a.href)}async function restoreBackup(){let f=$('restoreFile').files[0];if(!f)return toast('Choose a backup file');if(!confirm('This will overwrite this branch data. Continue?'))return;try{let j=JSON.parse(await f.text());if(!j.data||!j.data.products)throw Error('Invalid backup file');await cloud.ref('shops/'+shopId).set(j.data);await audit('Backup restored',f.name);await loadShop();render();toast('Backup restored')}catch(e){toast('Restore failed: '+e.message)}}
-function exportCSV(k){let a=records(k);if(!a.length)return toast('No records to export');let cols=k==='sales'?['receipt','date','cashier','payment','subtotal','tax','total']:Object.keys(a[0]);let csv=[cols.join(','),...a.map(x=>cols.map(c=>'"'+String(x[c]??'').replace(/"/g,'""')+'"').join(','))].join('\n'),blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob),el=document.createElement('a');el.href=url;el.download=shopId+'-'+k+'.csv';el.click();URL.revokeObjectURL(url)}function filterTable(inp){let q=inp.value.toLowerCase();document.querySelectorAll('tbody tr').forEach(r=>r.classList.toggle('hidden',!r.textContent.toLowerCase().includes(q)))}
-const pages={dashboard,pos,products,purchasing,grn,stock,sales,customers,suppliers,expenses,reports,users,branches:branchesView,audit:auditPage,settings};
-</script></body></html>
+
+async function deleteRecord(k,id){
+ if(!confirm('Delete this record?'))return;
+ await cloud.ref(path(k)+'/'+id).remove();
+ await audit('Record deleted',k+'/'+id);
+ await loadShop();render();
+}
+
+/* POS */
+
+function pos(){
+ let ps=records('products');
+ let items=ps.filter(p=>num(p.qty)>0).map(p=>
+ `<button class="tile" onclick="addCart('${p.id}')">
+ <b>${esc(p.name)}</b><small>${esc(p.code)} · ${num(p.qty)} in stock</small>
+ <strong>${money(p.price)}</strong></button>`).join('');
+ return head('POS / New Sale','Cashier: '+esc(profile.name||user.email))+
+ `<div class="posgrid"><div class="card">
+ <input id="posSearch" placeholder="Search product name or code" oninput="searchTiles()">
+ <div class="productgrid" id="productTiles">${items||'<p class="empty">No products in stock.</p>'}</div>
+ </div><div class="card"><h2>Current sale</h2>
+ <div id="cartLines">${cartHTML()}</div>
+ <div class="total"><span>Subtotal</span><b>${money(cartTotal())}</b></div>
+ <div class="total"><span>Tax</span><b>${money(cartTotal()*num(shopData.settings.tax)/100)}</b></div>
+ <div class="total big"><span>TOTAL</span>
+ <span>${money(cartTotal()*(1+num(shopData.settings.tax)/100))}</span></div>
+ <div class="field"><label>Payment method</label><select id="payment">
+ <option>Cash</option><option>Mobile Money</option><option>Card</option>
+ <option>Bank Transfer</option><option>Credit</option></select></div>
+ <button class="btn" style="width:100%" onclick="checkout()">Complete sale</button>
+ <button class="btn light" style="width:100%;margin-top:7px" onclick="clearCart()">Clear cart</button>
+ </div></div>`;
+}
+
+function searchTiles(){
+ let q=val('posSearch').toLowerCase();
+ document.querySelectorAll('#productTiles .tile').forEach(x=>
+ x.classList.toggle('hidden',!x.textContent.toLowerCase().includes(q)));
+}
+function addCart(id){
+ let p=shopData.products[id];if(!p)return;
+ let x=cart.find(c=>c.id===id);
+ if(x){if(x.qty>=num(p.qty))return toast('Not enough stock');x.qty++}
+ else cart.push({id,name:p.name,price:num(p.price),qty:1});
+ render();
+}
+function cartTotal(){return cart.reduce((a,x)=>a+x.price*x.qty,0)}
+function cartHTML(){
+ return cart.length?cart.map(x=>
+ `<div class="cartline"><span>${esc(x.name)}<br><small>${money(x.price)}</small></span>
+ <input type="number" min="1" value="${x.qty}" onchange="setCartQty('${x.id}',this.value)">
+ <b>${money(x.price*x.qty)}</b>
+ <button class="btn red small" onclick="removeCart('${x.id}')">×</button></div>`
+ ).join(''):'<p class="empty">Cart is empty</p>';
+}
+function setCartQty(id,q){
+ let x=cart.find(c=>c.id===id),p=shopData.products[id];
+ if(!x)return;
+ x.qty=Math.max(1,Math.min(num(q),num(p.qty)));
+ render();
+}
+function removeCart(id){cart=cart.filter(x=>x.id!==id);render()}
+function clearCart(){cart=[];render()}
+
+async function checkout(){
+ if(!cart.length)return toast('Cart is empty');
+ let lines=cart.map(x=>({...x}));
+ for(let x of lines){
+  let p=shopData.products[x.id];
+  if(!p||num(p.qty)<x.qty)return toast('Stock changed. Refresh and try again.');
+ }
+ let subtotal=cartTotal(),tax=subtotal*num(shopData.settings.tax)/100,total=subtotal+tax;
+ let id=key(),receipt='R-'+Date.now(),updates={};
+ lines.forEach(x=>{
+  updates[path('products')+'/'+x.id+'/qty']=num(shopData.products[x.id].qty)-x.qty;
+ });
+ let sale={
+  receipt,date:new Date().toISOString(),
+  cashier:profile.name||user.email,uid:user.uid,shop:shopId,
+  payment:val('payment')||'Cash',subtotal,tax,total,items:lines
+ };
+ updates[path('sales')+'/'+id]=sale;
+ try{
+  await cloud.ref().update(updates);
+  await audit('Sale completed',receipt+' '+money(total));
+  cart=[];await loadShop();render();printReceipt(sale);
+  toast('Sale completed');
+ }catch(e){toast('Sale failed: '+e.message)}
+}
+
+function printReceipt(s){
+ let html=`<h2>${esc(shopData.settings.shopName||'PROMAX SmartPOS')}</h2>
+ <p>Receipt: ${esc(s.receipt)}<br>${esc(s.date)}<br>Cashier: ${esc(s.cashier)}</p><hr>
+ ${s.items.map(x=>`<p>${esc(x.name)} × ${x.qty} <span style="float:right">${money(x.price*x.qty)}</span></p>`).join('')}
+ <hr><p>Subtotal: ${money(s.subtotal)}</p><p>Tax: ${money(s.tax)}</p>
+ <h3>TOTAL: ${money(s.total)}</h3><p>Payment: ${esc(s.payment)}</p><center>Thank you</center>`;
+ $('printArea').innerHTML=html;$('printArea').classList.remove('hidden');
+ window.print();$('printArea').classList.add('hidden');
+}
+
+/* SALES */
+
+function sales(){
+ let a=records('sales').sort((x,y)=>(y.date||'').localeCompare(x.date||''));
+ return head('Sales & Receipts','Completed transactions',
+ `<button class="btn blue" onclick="exportCSV('sales')">Export CSV</button>`)+
+ `<div class="card">${salesTable(a)}</div>`;
+}
+
+/* PURCHASING */
+
+function purchasing(){
+ let a=records('orders');
+ return head('Purchase Orders','Record orders placed with suppliers',
+ `<button class="btn" onclick="newOrder()">+ New order</button>`)+
+ `<div class="card">${table(['PO number','Supplier','Date','Status','Notes'],
+ a.map(x=>`<tr><td>${esc(x.number)}</td><td>${esc(x.supplier)}</td>
+ <td>${esc(x.date)}</td><td>${esc(x.status)}</td><td>${esc(x.notes)}</td></tr>`).join(''))}</div>`;
+}
+function newOrder(){
+ let suppliers=records('suppliers');
+ $('main').innerHTML=head('New purchase order','Create a supplier order')+
+ `<div class="card"><div class="formgrid">
+ ${selectField('Supplier','osupplier',suppliers.map(s=>`<option>${esc(s.name)}</option>`).join(''))}
+ ${field('Order date','odate','date',dateNow())}
+ ${field('Notes','onotes')}
+ </div><button class="btn" onclick="saveOrder()">Save purchase order</button>
+ <button class="btn light" onclick="go('purchasing')">Cancel</button></div>`;
+}
+async function saveOrder(){
+ let id=key(),o={
+  number:'PO-'+Date.now(),supplier:val('osupplier'),
+  date:val('odate'),notes:val('onotes'),status:'OPEN'
+ };
+ await cloud.ref(path('orders')+'/'+id).set(o);
+ await audit('Purchase order created',o.number);
+ await loadShop();go('purchasing');
+}
+
+/* GRN - CREATE PRODUCTS DIRECTLY WHILE RECEIVING STOCK */
+
+function grn(){
+ let a=records('grns');
+ return head('Goods Received (GRN)','Receive products into the selected branch',
+ `<button class="btn" onclick="newGRN()">+ Receive stock</button>`)+
+ `<div class="card">${table(['GRN number','Supplier','Date','Invoice','Items','Total units'],
+ a.map(x=>`<tr><td>${esc(x.number)}</td><td>${esc(x.supplier)}</td>
+ <td>${esc(x.date)}</td><td>${esc(x.invoice)}</td>
+ <td>${x.items?.length||0}</td><td>${num(x.totalQty)}</td></tr>`).join(''))}</div>`;
+}
+
+function newGRN(){
+ grnCart=[];
+ let ss=records('suppliers');
+ let ps=records('products');
+ $('main').innerHTML=head('Receive stock','Add received quantities to branch inventory')+
+ `<div class="card">
+ <h2>GRN details</h2>
+ <div class="formgrid">
+ ${selectField('Supplier','gsupplier',
+ ss.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join(''))}
+ ${field('Date','gdate','date',dateNow())}
+ ${field('Invoice number','ginvoice')}
+ ${field('GRN number','gno','text','AUTO-'+Date.now())}
+ </div>
+
+ <hr style="border:0;border-top:1px solid var(--line);margin:15px 0">
+ <div class="toolbar" style="justify-content:space-between">
+ <h2>Product lines</h2>
+ <button class="btn blue" onclick="toggleNewGRNProduct()">
+ + Create New Product
+ </button>
+ </div>
+
+ <div id="newGRNProductPanel" class="grn-product-panel hidden">
+  <h2>Create product during receiving</h2>
+  <p class="muted">Enter the new product details below. The product will only be saved when you save this GRN.</p>
+  <div class="formgrid">
+   ${field('Product code','gnewcode')}
+   ${field('Product name','gnewname')}
+   ${field('Cost price','gnewcost','number','0')}
+   ${field('Selling price','gnewsell','number','0')}
+   ${field('Quantity received','gnewqty','number','1')}
+  </div>
+  <div class="toolbar">
+   <button class="btn" onclick="addNewGRNProduct()">Add new product to GRN</button>
+   <button class="btn light" onclick="toggleNewGRNProduct(false)">Close</button>
+  </div>
+ </div>
+
+ <div class="formgrid">
+  ${selectField('Existing product','gproduct',
+   `<option value="">Select a product</option>`+
+   ps.map(p=>`<option value="${p.id}">${esc(p.name)} (${esc(p.code)})</option>`).join(''))}
+  ${field('Quantity received','gqty','number','1')}
+  ${field('Cost price','gcost','number','')}
+  ${field('Selling price','gsell','number','')}
+ </div>
+ <button class="btn blue" onclick="addGRNLine()">Add existing product</button>
+
+ <div id="grnLines" style="margin-top:15px">
+ <p class="empty">No products added yet.</p>
+ </div>
+ <div id="grnSummary"></div>
+ <hr style="border:0;border-top:1px solid var(--line);margin:15px 0">
+ <div class="toolbar">
+  <button class="btn" onclick="saveGRN()">Save GRN & Update Stock</button>
+  <button class="btn light" onclick="cancelGRN()">Cancel</button>
+ </div>
+ </div>`;
+}
+
+function toggleNewGRNProduct(show){
+ let panel=$('newGRNProductPanel');
+ if(!panel)return;
+ panel.classList.toggle('hidden',show===false?!true:!panel.classList.contains('hidden'));
+ if(show===true)panel.classList.remove('hidden');
+}
+
+function grnCodeExists(code){
+ return records('products').some(p=>
+ String(p.code||'').trim().toLowerCase()===code.trim().toLowerCase()
+ )||grnCart.some(p=>
+ String(p.code||'').trim().toLowerCase()===code.trim().toLowerCase()
+ );
+}
+
+function addNewGRNProduct(){
+ let code=val('gnewcode').trim();
+ let name=val('gnewname').trim();
+ let cost=Number(val('gnewcost'));
+ let sell=Number(val('gnewsell'));
+ let qty=Number(val('gnewqty'));
+
+ if(!code||!name)return toast('Enter product code and name');
+ if(grnCodeExists(code))return toast('This product code already exists');
+ if(!Number.isFinite(cost)||cost<0||
+    !Number.isFinite(sell)||sell<0||
+    !Number.isFinite(qty)||qty<=0)
+  return toast('Enter valid prices and quantity');
+
+ let id='NEW_'+key();
+ grnCart.push({
+  id,isNew:true,code,name,cost,sell,qty
+ });
+ renderGRNLines();
+ $('gnewcode').value='';
+ $('gnewname').value='';
+ $('gnewcost').value='0';
+ $('gnewsell').value='0';
+ $('gnewqty').value='1';
+ toast('New product added to GRN');
+}
+
+function addGRNLine(){
+ let id=val('gproduct');
+ let p=shopData.products[id];
+ let qty=Number(val('gqty'));
+ let cost=val('gcost')===''?num(p?.cost):Number(val('gcost'));
+ let sell=val('gsell')===''?num(p?.price):Number(val('gsell'));
+
+ if(!p)return toast('Select an existing product');
+ if(!Number.isFinite(qty)||qty<=0||
+    !Number.isFinite(cost)||cost<0||
+    !Number.isFinite(sell)||sell<0)
+  return toast('Enter valid quantity and prices');
+
+ let existing=grnCart.find(x=>x.id===id);
+ if(existing){
+  existing.qty+=qty;
+  existing.cost=cost;
+  existing.sell=sell;
+ }else{
+  grnCart.push({
+   id,isNew:false,code:p.code,name:p.name,qty,cost,sell
+  });
+ }
+ renderGRNLines();
+ $('gqty').value='1';
+ $('gcost').value='';
+ $('gsell').value='';
+ toast('Product added to GRN');
+}
+
+function renderGRNLines(){
+ let el=$('grnLines');
+ if(!el)return;
+ if(!grnCart.length){
+  el.innerHTML='<p class="empty">No products added yet.</p>';
+  $('grnSummary').innerHTML='';
+  return;
+ }
+ el.innerHTML=grnCart.map((x,i)=>`
+ <div class="grn-line">
+  <div class="grn-line-info">
+   <b>${esc(x.name)}</b>
+   <small>${esc(x.code)} ${x.isNew?'<span class="pill">NEW PRODUCT</span>':''}</small>
+   <small>Qty: ${x.qty} · Cost: ${money(x.cost)} · Selling: ${money(x.sell)}</small>
+  </div>
+  <div class="toolbar">
+   <b>${money(x.qty*x.cost)}</b>
+   <button class="btn red small" onclick="removeGRNLine(${i})">×</button>
+  </div>
+ </div>`).join('');
+ let units=grnCart.reduce((a,x)=>a+x.qty,0);
+ let total=grnCart.reduce((a,x)=>a+x.qty*x.cost,0);
+ $('grnSummary').innerHTML=`
+ <div class="grn-summary">
+ <div class="total"><span>Product lines</span><b>${grnCart.length}</b></div>
+ <div class="total"><span>Total units</span><b>${units}</b></div>
+ <div class="total"><span>Total cost</span><b>${money(total)}</b></div>
+ </div>`;
+}
+
+function removeGRNLine(i){
+ grnCart.splice(i,1);
+ renderGRNLines();
+}
+
+function cancelGRN(){
+ if(grnCart.length&&!confirm('Cancel this GRN and discard the unsaved product lines?'))return;
+ grnCart=[];
+ go('grn');
+}
+
+async function saveGRN(){
+ if(!grnCart.length)return toast('Add at least one product');
+
+ let supplier=val('gsupplier');
+ let date=val('gdate');
+ let number=val('gno').trim();
+ let invoice=val('ginvoice').trim();
+
+ if(!number||!date)return toast('Enter GRN number and date');
+
+ let updates={};
+ let totalQty=0;
+ let totalCost=0;
+ let savedItems=[];
+
+ for(let x of grnCart){
+  let productId=x.id;
+
+  if(x.isNew){
+   productId=key();
+   let product={
+    code:x.code,name:x.name,cost:x.cost,price:x.sell,
+    qty:x.qty,createdAt:new Date().toISOString(),
+    createdFromGRN:number
+   };
+   updates[path('products')+'/'+productId]=product;
+  }else{
+   let p=shopData.products[x.id];
+   if(!p)return toast('Product no longer exists: '+x.name);
+   updates[path('products')+'/'+x.id+'/qty']=num(p.qty)+x.qty;
+   updates[path('products')+'/'+x.id+'/cost']=x.cost;
+   updates[path('products')+'/'+x.id+'/price']=x.sell;
+  }
+
+  totalQty+=x.qty;
+  totalCost+=x.qty*x.cost;
+  savedItems.push({
+   id:productId,
+   code:x.code,
+   name:x.name,
+   qty:x.qty,
+   cost:x.cost,
+   sell:x.sell,
+   isNew:!!x.isNew
+  });
+ }
+
+ let grnId=key();
+ let grnRecord={
+  number,supplier,date,invoice,
+  items:savedItems,
+  totalQty,totalCost,
+  receivedBy:profile.name||user.email,
+  receivedByUid:user.uid,
+  createdAt:new Date().toISOString()
+ };
+ updates[path('grns')+'/'+grnId]=grnRecord;
+
+ try{
+  await cloud.ref().update(updates);
+  await audit('Stock received',number+' | '+totalQty+' units');
+  grnCart=[];
+  await loadShop();
+  go('grn');
+  toast('GRN saved. Stock updated successfully.');
+ }catch(e){
+  toast('GRN save failed: '+e.message);
+ }
+}
+
+/* STOCK CONTROL */
+
+function stock(){
+ let a=records('products');
+ let rows=a.map(p=>`<tr>
+ <td>${esc(p.code)}</td><td>${esc(p.name)}</td><td>${num(p.qty)}</td>
+ <td>${num(p.qty)<=num(shopData.settings.lowStock??5)?
+ '<span class="pill low">LOW</span>':'<span class="pill">OK</span>'}</td>
+ <td><button class="btn light small" onclick="adjustStock('${p.id}')">Adjust</button></td>
+ </tr>`).join('');
+ return head('Stock Control','Current branch stock levels',
+ `<button class="btn blue" onclick="go('grn')">Receive stock</button>`)+
+ `<div class="card">${table(['Code','Product','Quantity','Status','Action'],rows)}</div>`;
+}
+
+async function adjustStock(id){
+ let p=shopData.products[id];
+ let v=prompt('Enter stock adjustment (+ or -):',0);
+ if(v===null)return;
+ let change=Number(v);
+ let n=num(p.qty)+change;
+ if(!Number.isFinite(change)||n<0)return toast('Invalid quantity');
+ await cloud.ref(path('products')+'/'+id+'/qty').set(n);
+ await cloud.ref(path('adjustments')+'/'+key()).set({
+  product:p.name,change,date:new Date().toISOString(),user:profile.name
+ });
+ await audit('Stock adjusted',p.name+' '+change);
+ await loadShop();render();
+}
+
+/* CUSTOMERS AND SUPPLIERS */
+
+function customers(){
+ return head('Customers','Customer directory',
+ `<button class="btn" onclick="addContact('customers')">+ Add customer</button>`)+
+ `<div class="card">${contactTable('customers')}</div>`;
+}
+function suppliers(){
+ return head('Suppliers','Supplier directory',
+ `<button class="btn" onclick="addContact('suppliers')">+ Add supplier</button>`)+
+ `<div class="card">${contactTable('suppliers')}</div>`;
+}
+function contactTable(k){
+ return table(['Name','Phone','Email','Action'],
+ records(k).map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td>
+ <td>${esc(x.email)}</td><td>
+ <button class="btn red small" onclick="deleteRecord('${k}','${x.id}')">Delete</button>
+ </td></tr>`).join(''));
+}
+async function addContact(k){
+ let name=prompt('Name:');
+ if(!name)return;
+ let phone=prompt('Phone number:')||'';
+ let email=prompt('Email (optional):')||'';
+ await cloud.ref(path(k)+'/'+key()).set({name,phone,email});
+ await audit(k+' added',name);
+ await loadShop();render();
+}
+
+/* EXPENSES */
+
+function expenses(){
+ let a=records('expenses');
+ let sum=a.reduce((n,x)=>n+num(x.amount),0);
+ return head('Expenses & Cash','Record branch operating expenses',
+ `<button class="btn" onclick="addExpense()">+ Add expense</button>`)+
+ `<div class="grid">${kpi('TOTAL EXPENSES',money(sum))}${kpi('ENTRIES',a.length)}</div>
+ <div class="card">${table(['Date','Category','Description','Amount'],
+ a.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.category)}</td>
+ <td>${esc(x.description)}</td><td>${money(x.amount)}</td></tr>`).join(''))}</div>`;
+}
+async function addExpense(){
+ let category=prompt('Expense category:');
+ if(!category)return;
+ let description=prompt('Description:')||'';
+ let amount=Number(prompt('Amount:','0'));
+ if(!Number.isFinite(amount)||amount<=0)return toast('Enter a valid amount');
+ await cloud.ref(path('expenses')+'/'+key()).set({
+  category,description,amount,date:dateNow(),by:profile.name
+ });
+ await audit('Expense recorded',category+' '+money(amount));
+ await loadShop();render();
+}
+
+/* REPORTS */
+
+function reports(){
+ let ss=records('sales');
+ let rev=ss.reduce((a,x)=>a+num(x.total),0);
+ let cost=ss.reduce((a,s)=>a+(s.items||[]).reduce((n,i)=>
+  n+num(shopData.products[i.id]?.cost)*num(i.qty),0),0);
+ let exp=records('expenses').reduce((a,x)=>a+num(x.amount),0);
+ let pay={};
+ ss.forEach(s=>pay[s.payment]=(pay[s.payment]||0)+num(s.total));
+ return head('Reports','Sales, cost estimates and payment summary',
+ `<button class="btn blue" onclick="exportCSV('sales')">Export sales CSV</button>`)+
+ `<div class="grid">
+ ${kpi('REVENUE',money(rev))}
+ ${kpi('ESTIMATED COST',money(cost))}
+ ${kpi('GROSS PROFIT',money(rev-cost))}
+ ${kpi('EXPENSES',money(exp))}
+ </div><div class="card"><h2>Payment breakdown</h2>
+ ${table(['Payment method','Total'],
+ Object.entries(pay).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${money(v)}</td></tr>`).join(''))}
+ <p><b>Estimated net after recorded expenses: ${money(rev-cost-exp)}</b></p>
+ <small class="muted">Profit estimate uses current product cost prices; historical cost changes can affect accuracy.</small>
+ </div>`;
+}
+
+/* USERS AND ROLES */
+
+function users(){
+ if(!isRoot()&&profile.role!=='ADMIN')
+  return head('Users & Roles','Administrator access required');
+ return head('Users & Roles','Manage staff profiles and branch access',
+ `<button class="btn" onclick="newUserProfile()">+ Add staff profile</button>`)+
+ `<div class="card"><p class="muted">Create the staff login first in Firebase Authentication. Then add that account UID here. Deactivate profiles to block app access; this does not delete the Authentication account.</p>`+
+ table(['Name','Email','Role','Active','Branches','Action'],
+ staffCache.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.email)}</td>
+ <td>${esc(x.role)}</td>
+ <td>${x.active===false?'<span class="pill bad">No</span>':'<span class="pill">Yes</span>'}</td>
+ <td>${esc(Object.keys(x.branches||{}).join(', '))}</td>
+ <td><button class="btn light small" onclick="editUser('${x.uid}')">Edit</button>
+ <button class="btn red small" onclick="toggleUser('${x.uid}')">${x.active===false?'Activate':'Deactivate'}</button></td></tr>`).join(''))+
+ `</div>`;
+}
+
+function newUserProfile(uid=''){
+ let u=staffCache.find(x=>x.uid===uid)||{};
+ $('main').innerHTML=head(uid?'Edit staff profile':'Add staff profile',
+ 'Assign an existing Firebase Authentication UID')+
+ `<div class="card"><div class="formgrid">
+ ${field('Firebase Auth UID','uuid','text',u.uid||'')}
+ ${field('Full name','uname','text',u.name||'')}
+ ${field('Email','uemail','email',u.email||'')}
+ ${selectField('Role','urole',
+ ['ADMIN','MANAGER','CASHIER','STOCK KEEPER'].map(x=>
+ `<option ${u.role===x?'selected':''}>${x}</option>`).join(''))}
+ ${selectField('Default branch','udefault',
+ Object.entries(branches).map(([id,b])=>
+ `<option value="${esc(id)}" ${u.defaultShop===id?'selected':''}>${esc(b.name||id)}</option>`).join(''))}
+ </div>
+ <p><b>Branch access</b></p>
+ ${Object.entries(branches).map(([id,b])=>
+ `<label style="display:inline-flex;gap:5px;margin:6px">
+ <input type="checkbox" class="ubranch" value="${esc(id)}" ${u.branches?.[id]?'checked':''}>
+ ${esc(b.name||id)}</label>`).join('')}
+ <p><b>Permissions for non-admin roles</b></p>
+ ${['pos','sales','stock','manage','reports','admin'].map(p=>
+ `<label style="display:inline-flex;gap:5px;margin:6px">
+ <input type="checkbox" class="uperm" value="${p}" ${u.permissions?.[p]?'checked':''}>${p}</label>`).join('')}
+ <br><button class="btn" onclick="saveUser('${uid}')">Save profile</button>
+ <button class="btn light" onclick="go('users')">Cancel</button></div>`;
+}
+
+function editUser(uid){newUserProfile(uid)}
+
+async function saveUser(old=''){
+ let uid=val('uuid').trim();
+ if(!uid)return toast('UID required');
+ let branchesAllowed={},permissions={};
+ document.querySelectorAll('.ubranch:checked').forEach(x=>branchesAllowed[x.value]=true);
+ document.querySelectorAll('.uperm:checked').forEach(x=>permissions[x.value]=true);
+ let u={
+  name:val('uname'),email:val('uemail'),role:val('urole'),
+  defaultShop:val('udefault'),branches:branchesAllowed,permissions,active:true
+ };
+ if(old&&old!==uid)await cloud.ref('users/'+old).remove();
+ await cloud.ref('users/'+uid).update(u);
+ await audit('Staff profile saved',u.name);
+ await loadAdminData();go('users');toast('Staff profile saved');
+}
+
+async function toggleUser(uid){
+ let x=staffCache.find(u=>u.uid===uid);
+ if(!x)return;
+ await cloud.ref('users/'+uid+'/active').set(x.active===false);
+ await audit('Staff status changed',uid);
+ await loadAdminData();render();
+}
+
+/* BRANCHES */
+
+function branchesView(){
+ return head('Branches / Shops','One administrator can manage all branches',
+ `<button class="btn" onclick="addBranch()">+ Add branch</button>`)+
+ `<div class="card">${table(['Branch ID','Branch name','Location','Status','Action'],
+ Object.entries(branches).map(([id,b])=>`<tr>
+ <td>${esc(id)}</td><td>${esc(b.name)}</td><td>${esc(b.location)}</td>
+ <td>${b.active===false?'Inactive':'Active'}</td>
+ <td><button class="btn light small" onclick="switchShop('${id}')">Open</button></td>
+ </tr>`).join(''))}</div>`;
+}
+
+async function addBranch(){
+ let id=prompt('Branch ID (example SHOP002):');
+ if(!id)return;
+ id=id.trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'');
+ if(!id||branches[id])return toast('Invalid or existing branch ID');
+ let name=prompt('Branch name:');
+ if(!name)return;
+ let location=prompt('Location:')||'';
+ await cloud.ref('branches/'+id).set({name,location,active:true});
+ await cloud.ref('shops/'+id).set({
+  settings:{shopName:name,currency:'USD',tax:0,lowStock:5}
+ });
+ await audit('Branch created',id+' '+name);
+ await loadBranches();toast('Branch created');
+}
+
+/* AUDIT */
+
+function auditPage(){
+ return head('Audit Log','Administrative activity across shops')+
+ `<div class="card">${table(['Date','User','Branch','Action','Details'],
+ auditCache.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.user)}</td>
+ <td>${esc(x.shop)}</td><td>${esc(x.action)}</td><td>${esc(x.detail)}</td></tr>`).join(''))}</div>`;
+}
+
+/* SETTINGS - FIVE CLICKABLE BUTTONS WITH THEIR OWN OPTIONS */
+
+function settings(){
+ let s=shopData.settings||{};
+ let tabs=[
+  ['general','⚙','General'],
+  ['pricing','💰','Tax & Pricing'],
+  ['stock','📦','Stock Alerts'],
+  ['backup','💾','Backup & Restore'],
+  ['integrations','🔌','Integrations']
+ ];
+ let buttons=tabs.map(([id,icon,label])=>`
+ <button class="${settingsTab===id?'active':''}" onclick="setSettingsTab('${id}')">
+ <span>${icon}</span>${label}
+ </button>`).join('');
+
+ let content='';
+
+ if(settingsTab==='general'){
+  content=`
+  <h2>General Settings</h2>
+  <p class="settings-description">Manage the identity and basic operation of this shop.</p>
+  <div class="formgrid">
+   ${field('Shop name','sname','text',s.shopName||'')}
+   ${selectField('Currency','scurrency',
+    `<option value="USD" ${s.currency==='USD'?'selected':''}>USD - US Dollar</option>
+     <option value="ZWG" ${s.currency==='ZWG'?'selected':''}>ZWG - Zimbabwe Gold</option>`)}
+   ${selectField('Date format','sdateformat',
+    `<option value="DD/MM/YYYY" ${s.dateFormat!=='MM/DD/YYYY'?'selected':''}>DD/MM/YYYY</option>
+     <option value="MM/DD/YYYY" ${s.dateFormat==='MM/DD/YYYY'?'selected':''}>MM/DD/YYYY</option>`)}
+   ${selectField('Receipt footer','sreceipt',
+    `<option value="Thank you for shopping with us" ${s.receiptFooter!=='Thank you for shopping with us'?'selected':''}>Thank you for shopping with us</option>
+     <option value="Thank you. Visit again." ${s.receiptFooter==='Thank you. Visit again.'?'selected':''}>Thank you. Visit again.</option>`)}
+  </div>
+  <button class="btn settings-save" onclick="saveSettingsSection('general')">Save General Settings</button>`;
+ }
+
+ if(settingsTab==='pricing'){
+  content=`
+  <h2>Tax & Pricing</h2>
+  <p class="settings-description">Set the VAT percentage and pricing preferences for this branch.</p>
+  <div class="formgrid">
+   ${field('VAT / Tax percentage','stax','number',s.tax??0)}
+   ${selectField('Tax calculation','staxmode',
+    `<option value="exclusive" ${s.taxMode!=='inclusive'?'selected':''}>Tax added to selling price</option>
+     <option value="inclusive" ${s.taxMode==='inclusive'?'selected':''}>Tax included in selling price</option>`)}
+   ${selectField('Price display','spriceformat',
+    `<option value="2" ${s.priceDecimals!==0?'selected':''}>2 decimal places</option>
+     <option value="0" ${s.priceDecimals===0?'selected':''}>Whole numbers</option>`)}
+  </div>
+  <button class="btn settings-save" onclick="saveSettingsSection('pricing')">Save Tax & Pricing</button>`;
+ }
+
+ if(settingsTab==='stock'){
+  content=`
+  <h2>Stock Alerts</h2>
+  <p class="settings-description">Choose when products should be flagged as low in stock.</p>
+  <div class="formgrid">
+   ${field('Low stock alert quantity','slow','number',s.lowStock??5)}
+   ${field('Critical stock quantity','scritical','number',s.criticalStock??2)}
+  </div>
+  <p class="muted">Products at or below the low stock quantity will be marked LOW. Products at or below the critical quantity will be marked CRITICAL.</p>
+  <button class="btn settings-save" onclick="saveSettingsSection('stock')">Save Stock Alerts</button>`;
+ }
+
+ if(settingsTab==='backup'){
+  content=`
+  <h2>Backup & Restore</h2>
+  <p class="settings-description">Export a copy of this branch's data or restore a previous backup.</p>
+  <div class="card">
+   <h2>Download backup</h2>
+   <p class="muted">Download products, sales, GRNs, suppliers, customers, expenses and settings for this branch.</p>
+   <button class="btn blue" onclick="backup()">Download Branch Backup</button>
+  </div>
+  <div class="card">
+   <h2>Restore backup</h2>
+   <p class="muted">Restoring will replace the current branch data. Download a backup first.</p>
+   <div class="field"><label>Select backup JSON file</label><input type="file" id="restoreFile" accept="application/json"></div>
+   <button class="btn light" onclick="restoreBackup()">Restore Backup</button>
+  </div>`;
+ }
+
+ if(settingsTab==='integrations'){
+  content=`
+  <h2>Integrations</h2>
+  <p class="settings-description">View connected services and integration settings.</p>
+  <div class="card">
+   <h2>Firebase Database</h2>
+   <p>Project: <b>smartpos-83781</b></p>
+   <p>Connection: <span class="pill">Connected when signed in</span></p>
+   <p class="muted">Authentication and database access are controlled by Firebase security rules.</p>
+  </div>
+  <div class="card">
+   <h2>ZIMRA Fiscalisation</h2>
+   <p>Status: <span class="pill low">NOT CONNECTED</span></p>
+   <p class="muted">Fiscalisation is not enabled by this standalone application. A compliant integration requires the appropriate ZIMRA device/API configuration and testing.</p>
+  </div>
+  <div class="card">
+   <h2>Cloud database</h2>
+   <p>Firebase Realtime Database is used for branch data and user profiles.</p>
+  </div>`;
+ }
+
+ return head('Settings & Backup','Manage your SmartPOS configuration')+
+ `<div class="settings-layout">
+  <div class="settings-nav">
+   <div class="settings-mobile-title" style="font-weight:bold;padding:10px">SETTINGS MENU</div>
+   ${buttons}
+  </div>
+  <div class="settings-content">
+   <div class="settings-section">${content}</div>
+  </div>
+ </div>`;
+}
+
+function setSettingsTab(tab){
+ settingsTab=tab;
+ render();
+}
+
+async function saveSettingsSection(section){
+ let updates={};
+ if(section==='general'){
+  let name=val('sname').trim();
+  if(!name)return toast('Enter shop name');
+  updates={
+   shopName:name,
+   currency:val('scurrency'),
+   dateFormat:val('sdateformat'),
+   receiptFooter:val('sreceipt')
+  };
+ }
+ if(section==='pricing'){
+  let tax=Number(val('stax'));
+  if(!Number.isFinite(tax)||tax<0||tax>100)
+   return toast('Enter a valid tax percentage');
+  updates={
+   tax,
+   taxMode:val('staxmode'),
+   priceDecimals:Number(val('spriceformat'))
+  };
+ }
+ if(section==='stock'){
+  let low=Number(val('slow'));
+  let critical=Number(val('scritical'));
+  if(!Number.isInteger(low)||low<0||!Number.isInteger(critical)||critical<0)
+   return toast('Enter valid stock alert quantities');
+  if(critical>low)return toast('Critical quantity should not exceed low stock quantity');
+  updates={lowStock:low,criticalStock:critical};
+ }
+ try{
+  await cloud.ref(path('settings')).update(updates);
+  await audit('Settings updated',section);
+  await loadShop();
+  render();
+  toast('Settings saved successfully');
+ }catch(e){toast('Settings save failed: '+e.message)}
+}
+
+/* BACKUP AND RESTORE */
+
+function backup(){
+ let blob=new Blob([JSON.stringify({
+  branch:shopId,
+  exportedAt:new Date().toISOString(),
+  data:shopData
+ },null,2)],{type:'application/json'});
+ let a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download='SmartPOS-'+shopId+'-backup.json';
+ a.click();
+ URL.revokeObjectURL(a.href);
+}
+
+async function restoreBackup(){
+ let f=$('restoreFile')?.files[0];
+ if(!f)return toast('Choose a backup file');
+ if(!confirm('This will overwrite this branch data. Continue?'))return;
+ try{
+  let j=JSON.parse(await f.text());
+  if(!j.data||!j.data.products)throw Error('Invalid backup file');
+  await cloud.ref('shops/'+shopId).set(j.data);
+  await audit('Backup restored',f.name);
+  await loadShop();
+  render();
+  toast('Backup restored');
+ }catch(e){toast('Restore failed: '+e.message)}
+}
+
+/* CSV EXPORT AND TABLE SEARCH */
+
+function exportCSV(k){
+ let a=records(k);
+ if(!a.length)return toast('No records to export');
+ let cols=k==='sales'?
+ ['receipt','date','cashier','payment','subtotal','tax','total']:
+ Object.keys(a[0]);
+ let csv=[cols.join(','),...a.map(x=>
+ cols.map(c=>'"'+String(x[c]??'').replace(/"/g,'""')+'"').join(',')
+ )].join('\n');
+ let blob=new Blob([csv],{type:'text/csv'});
+ let url=URL.createObjectURL(blob);
+ let el=document.createElement('a');
+ el.href=url;el.download=shopId+'-'+k+'.csv';el.click();
+ URL.revokeObjectURL(url);
+}
+
+function filterTable(inp){
+ let q=inp.value.toLowerCase();
+ document.querySelectorAll('tbody tr').forEach(r=>
+ r.classList.toggle('hidden',!r.textContent.toLowerCase().includes(q)));
+}
+
+const pages={
+ dashboard,pos,products,purchasing,grn,stock,sales,
+ customers,suppliers,expenses,reports,users,
+ branches:branchesView,audit:auditPage,settings
+};
+
+</script>
+</body>
+</html>
